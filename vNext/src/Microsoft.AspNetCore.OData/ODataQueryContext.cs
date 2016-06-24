@@ -21,27 +21,28 @@ namespace Microsoft.AspNetCore.OData
         /// Constructs an instance of <see cref="ODataQueryContext"/> with <see cref="IEdmModel" />, element CLR type,
         /// and <see cref="ODataPath" />.
         /// </summary>
+        /// <param name="requestServices">The request's service container.</param>
         /// <param name="model">The EdmModel that includes the <see cref="IEdmType"/> corresponding to
-        /// the given <paramref name="elementClrType"/>.</param>
+        ///     the given <paramref name="elementClrType"/>.</param>
         /// <param name="elementClrType">The CLR type of the element of the collection being queried.</param>
         /// <param name="path">The parsed <see cref="ODataPath"/>.</param>
-        public ODataQueryContext(IEdmModel model, Type elementClrType, ODataPath path)
+        public ODataQueryContext(IServiceProvider requestServices, IEdmModel model, Type elementClrType, ODataPath path)
         {
             if (model == null)
             {
-                throw Error.ArgumentNull("model");
+                throw Error.ArgumentNull(nameof(model));
             }
 
             if (elementClrType == null)
             {
-                throw Error.ArgumentNull("elementClrType");
+                throw Error.ArgumentNull(nameof(elementClrType));
             }
 
             ElementType = model.GetEdmType(elementClrType);
 
             if (ElementType == null)
             {
-                throw Error.Argument("elementClrType", SRResources.ClrTypeNotInModel, elementClrType.FullName);
+                throw Error.Argument(nameof(elementClrType), SRResources.ClrTypeNotInModel, elementClrType.FullName);
             }
 
             ElementClrType = elementClrType;
@@ -74,12 +75,12 @@ namespace Microsoft.AspNetCore.OData
             NavigationSource = GetNavigationSource(Model, ElementType, path);
         }
 
-        internal ODataQueryContext(IEdmModel model, Type elementClrType)
-            : this(model, elementClrType, path: null)
+        internal ODataQueryContext(IServiceProvider requestServices, IEdmModel model, Type elementClrType)
+            : this(requestServices, model, elementClrType, path: null)
         {
         }
 
-        internal ODataQueryContext(IEdmModel model, IEdmType elementType)
+        internal ODataQueryContext(IServiceProvider requestServices, IEdmModel model, IEdmType elementType)
             : this(model, elementType, path: null)
         {
         }

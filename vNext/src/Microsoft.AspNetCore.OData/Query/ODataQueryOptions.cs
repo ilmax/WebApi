@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.OData.Common;
@@ -8,14 +10,30 @@ using Microsoft.OData.Core;
 using Microsoft.OData.Core.UriParser;
 using Microsoft.OData.Edm;
 using System.Globalization;
+using System.Reflection;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Query.Validators;
+using Microsoft.OData.Core.UriParser.Semantic;
 
 namespace Microsoft.AspNetCore.OData.Query
 {
-    // TODO: Replace with full version in the future.
     public class ODataQueryOptions
     {
-        private readonly IAssemblyProvider _assemblyProvider;
-        private readonly ODataQueryOptionParser _queryOptionParser;
+        private static readonly MethodInfo _limitResultsGenericMethod = typeof(ODataQueryOptions).GetMethod("LimitResults");
+
+        //private ETag _etagIfMatch;
+
+        //private bool _etagIfMatchChecked;
+
+        //private ETag _etagIfNoneMatch;
+
+        //private bool _etagIfNoneMatchChecked;
+
+        private ODataQueryOptionParser _queryOptionParser;
+
+        private AllowedQueryOptions _ignoreQueryOptions = AllowedQueryOptions.None;
+        private readonly IAssemblyProvider _assembliesResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ODataQueryOptions"/> class based on the incoming request and some metadata information from
@@ -35,95 +53,203 @@ namespace Microsoft.AspNetCore.OData.Query
                 throw Error.ArgumentNull("request");
             }
 
-            _assemblyProvider = request.AssemblyProvider();
+            _assembliesResolver = request.AssemblyProvider();
 
+            if (_assembliesResolver == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            // remember the context and request
             Context = context;
             Request = request;
-            RawValues = new ODataRawQueryOptions();
 
-            var queryOptionDict = request.Query.ToDictionary(p => p.Key, p => p.Value.FirstOrDefault());
+            // Parse the query from request Uri
+            RawValues = new ODataRawQueryOptions();
+            IDictionary<string, string> queryParameters =
+                request.GetQueryNameValuePairs().ToDictionary(p => p.Key, p => p.Value);
+
             _queryOptionParser = new ODataQueryOptionParser(
                 context.Model,
                 context.ElementType,
                 context.NavigationSource,
-                queryOptionDict);
+                queryParameters);
 
-            BuildQueryOptions(queryOptionDict);
+            ODataUriResolverSetttings resolverSettings = new ODataUriResolverSetttings();
+            _queryOptionParser.Resolver = resolverSettings.CreateResolver();
+
+            BuildQueryOptions(queryParameters);
+
+            Validator = new ODataQueryValidator();
         }
 
         /// <summary>
         ///  Gets the given <see cref="ODataQueryContext"/>
         /// </summary>
-        public ODataQueryContext Context { get; }
+        public ODataQueryContext Context { get; private set; }
 
         /// <summary>
         /// Gets the request message associated with this instance.
         /// </summary>
-        public HttpRequest Request { get; }
+        public HttpRequest Request { get; private set; }
 
         /// <summary>
         /// Gets the raw string of all the OData query options
         /// </summary>
-        public ODataRawQueryOptions RawValues { get; }
+        public ODataRawQueryOptions RawValues { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="SelectExpandQueryOption"/>.
+        /// </summary>
+        public SelectExpandQueryOption SelectExpand { get; private set; }
+
+        ///// <summary>
+        ///// Gets the <see cref="ApplyQueryOption"/>.
+        ///// </summary>
+        //public ApplyQueryOption Apply { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="FilterQueryOption"/>.
         /// </summary>
         public FilterQueryOption Filter { get; private set; }
 
-        public SelectExpandQueryOption SelectExpand { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="OrderByQueryOption"/>.
+        /// </summary>
+        public OrderByQueryOption OrderBy { get; private set; }
 
         /// <summary>
-        /// Specifies a non-negative integer n that excludes the first n items of the queried collection from the result.         
+        /// Gets the <see cref="SkipQueryOption"/>.
         /// </summary>
-        /// <remarks>
-        /// Corresponds to the $skip query option.  The service returns items starting at position n+1.
-        /// </remarks>
-        public int? Skip { get; private set; }
+        public SkipQueryOption Skip { get; private set; }
 
         /// <summary>
-        /// Specifies a non-negative integer n that limits the number of items returned from a collection.
+        /// Gets the <see cref="TopQueryOption"/>.
         /// </summary>
-        /// <remarks>
-        /// Corresponds to the $take query option.  he service returns the number of available items up to but not greater than the specified value n.
-        /// </remarks>
-        public int? Top { get; private set; }
+        public TopQueryOption Top { get; private set; }
 
         /// <summary>
-        /// The $count system query option allows clients to request a count of the matching resources included with the resources in the response. 
-        /// The $count query option has a Boolean value of true or false.       
+        /// Gets the <see cref="CountQueryOption"/>.
         /// </summary>
-        /// <remarks>
-        /// The semantics of $count is covered in the [OData - Protocol] document.
-        /// </remarks>
-        public bool Count { get; private set; }
+        public CountQueryOption Count { get; private set; }
 
         /// <summary>
-        /// Applies the queries that are applicable to the $count computation, as per the OData protocol.
+        /// Gets or sets the query validator.
         /// </summary>
-        /// <remarks>
-        /// According to the protocol:
-        /// <para>
-        /// The $count system query option ignores any $top, $skip, or $expand query options, and returns the total count of results across all pages including only those results matching any specified $filter and $search. Clients should be aware that the count returned inline may not exactly equal the actual number of items returned, due to latency between calculating the count and enumerating the last value or due to inexact calculations on the service.
-        /// </para>
-        /// </remarks>
+        public ODataQueryValidator Validator { get; set; }
+
+        ///// <summary>
+        ///// Gets the <see cref="ETag"/> from IfMatch header.
+        ///// </summary>
+        //public virtual ETag IfMatch
+        //{
+        //    get
+        //    {
+        //        if (!_etagIfMatchChecked && _etagIfMatch == null)
+        //        {
+        //            EntityTagHeaderValue etagHeaderValue = Request.Headers.IfMatch.SingleOrDefault();
+        //            _etagIfMatch = GetETag(etagHeaderValue);
+        //            _etagIfMatchChecked = true;
+        //        }
+
+        //        return _etagIfMatch;
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Gets the <see cref="ETag"/> from IfNoneMatch header.
+        ///// </summary>
+        //public virtual ETag IfNoneMatch
+        //{
+        //    get
+        //    {
+        //        if (!_etagIfNoneMatchChecked && _etagIfNoneMatch == null)
+        //        {
+        //            EntityTagHeaderValue etagHeaderValue = Request.Headers.IfNoneMatch.SingleOrDefault();
+        //            _etagIfNoneMatch = GetETag(etagHeaderValue);
+        //            if (_etagIfNoneMatch != null)
+        //            {
+        //                _etagIfNoneMatch.IsIfNoneMatch = true;
+        //            }
+        //            _etagIfNoneMatchChecked = true;
+        //        }
+
+        //        return _etagIfNoneMatch;
+        //    }
+        //}
+
+        /// <summary>
+        /// Check if the given query option is an OData system query option.
+        /// </summary>
+        /// <param name="queryOptionName">The name of the query option.</param>
+        /// <returns>Returns <c>true</c> if the query option is an OData system query option.</returns>
+        public static bool IsSystemQueryOption(string queryOptionName)
+        {
+            return queryOptionName == "$orderby" ||
+                 queryOptionName == "$filter" ||
+                 queryOptionName == "$top" ||
+                 queryOptionName == "$skip" ||
+                 queryOptionName == "$count" ||
+                 queryOptionName == "$expand" ||
+                 queryOptionName == "$select" ||
+                 queryOptionName == "$format" ||
+                 queryOptionName == "$skiptoken" ||
+                 queryOptionName == "$deltatoken" ||
+                 queryOptionName == "$apply";
+        }
+
+        /// <summary>
+        /// Check if the given query option is the supported query option.
+        /// </summary>
+        /// <param name="queryOptionName">The name of the query option.</param>
+        /// <returns>Returns <c>true</c> if the query option is the supported query option.</returns>
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+            Justification = "Need lower case string here.")]
+        public bool IsSupportedQueryOption(string queryOptionName)
+        {
+            if (!_queryOptionParser.Resolver.EnableCaseInsensitive)
+            {
+                return IsSystemQueryOption(queryOptionName);
+            }
+
+            string lowcaseQueryOptionName = queryOptionName.ToLowerInvariant();
+            return IsSystemQueryOption(lowcaseQueryOptionName);
+        }
+
+        /// <summary>
+        /// Apply the individual query to the given IQueryable in the right order.
+        /// </summary>
+        /// <param name="query">The original <see cref="IQueryable"/>.</param>
+        /// <returns>The new <see cref="IQueryable"/> after the query has been applied to.</returns>
+        public virtual IQueryable ApplyTo(IQueryable query)
+        {
+            return ApplyTo(query, new ODataQuerySettings());
+        }
+
+        /// <summary>
+        /// Apply the individual query to the given IQueryable in the right order.
+        /// </summary>
+        /// <param name="query">The original <see cref="IQueryable"/>.</param>
+        /// <param name="ignoreQueryOptions">The query parameters that are already applied in queries.</param>
+        /// <returns>The new <see cref="IQueryable"/> after the query has been applied to.</returns>
+        public virtual IQueryable ApplyTo(IQueryable query, AllowedQueryOptions ignoreQueryOptions)
+        {
+            _ignoreQueryOptions = ignoreQueryOptions;
+            return ApplyTo(query, new ODataQuerySettings());
+        }
+
+        /// <summary>
+        /// Apply the individual query to the given IQueryable in the right order.
+        /// </summary>
         /// <param name="query">The original <see cref="IQueryable"/>.</param>
         /// <param name="querySettings">The settings to use in query composition.</param>
+        /// <param name="ignoreQueryOptions">The query parameters that are already applied in queries.</param>
         /// <returns>The new <see cref="IQueryable"/> after the query has been applied to.</returns>
-        public virtual IQueryable ApplyForCount(IQueryable query, ODataQuerySettings querySettings)
+        public virtual IQueryable ApplyTo(IQueryable query, ODataQuerySettings querySettings,
+            AllowedQueryOptions ignoreQueryOptions)
         {
-            if (query == null)
-            {
-                throw Error.ArgumentNull("query");
-            }
-
-            // Construct the actual query and apply them in the following order: filter
-            if (Filter != null)
-            {
-                query = Filter.ApplyTo(query, querySettings, _assemblyProvider);
-            }
-
-            return query;
+            _ignoreQueryOptions = ignoreQueryOptions;
+            return ApplyTo(query, querySettings);
         }
 
         /// <summary>
@@ -132,6 +258,10 @@ namespace Microsoft.AspNetCore.OData.Query
         /// <param name="query">The original <see cref="IQueryable"/>.</param>
         /// <param name="querySettings">The settings to use in query composition.</param>
         /// <returns>The new <see cref="IQueryable"/> after the query has been applied to.</returns>
+        [SuppressMessage(
+            "Microsoft.Maintainability",
+            "CA1502:AvoidExcessiveComplexity",
+            Justification = "These are simple conversion function and cannot be split up.")]
         public virtual IQueryable ApplyTo(IQueryable query, ODataQuerySettings querySettings)
         {
             if (query == null)
@@ -139,42 +269,374 @@ namespace Microsoft.AspNetCore.OData.Query
                 throw Error.ArgumentNull("query");
             }
 
-            // Construct the actual query and apply them in the following order: filter
-            if (Filter != null)
+            if (querySettings == null)
             {
-                query = Filter.ApplyTo(query, querySettings, _assemblyProvider);
+                throw Error.ArgumentNull("querySettings");
             }
 
-            if (Skip.HasValue)
+            IQueryable result = query;
+
+            //// First apply $apply
+            //// Section 3.15 of the spec http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/cs01/odata-data-aggregation-ext-v4.0-cs01.html#_Toc378326311
+            //if (IsAvailableODataQueryOption(Apply, AllowedQueryOptions.Apply))
+            //{
+            //    result = Apply.ApplyTo(result, querySettings, _assembliesResolver);
+            //    Request.ODataProperties().ApplyClause = Apply.ApplyClause;
+            //    this.Context.ElementClrType = Apply.ResultClrType;
+            //}
+
+            // Construct the actual query and apply them in the following order: filter, orderby, skip, top
+            if (IsAvailableODataQueryOption(Filter, AllowedQueryOptions.Filter))
             {
-                query = ExpressionHelpers.Skip(query, Skip.Value, Context.ElementClrType, false);
+                result = Filter.ApplyTo(result, querySettings, _assembliesResolver);
             }
 
-            int? take = null;
-            if (querySettings.PageSize.HasValue)
+            if (IsAvailableODataQueryOption(Count, AllowedQueryOptions.Count))
             {
-                take = Math.Min(querySettings.PageSize.Value, int.MaxValue);
+                if (Request.ODataProperties().TotalCount == null)
+                {
+                    // NOTE this is a bit simplified
+                    Request.ODataProperties().TotalCount = Count.GetEntityCount(query);
+                }
+
+                if (ODataCountMediaTypeMapping.IsCountRequest(Request))
+                {
+                    return result;
+                }
             }
-            if (Top.HasValue)
+
+            OrderByQueryOption orderBy = OrderBy;
+
+            // $skip or $top require a stable sort for predictable results.
+            // Result limits require a stable sort to be able to generate a next page link.
+            // If either is present in the query and we have permission,
+            // generate an $orderby that will produce a stable sort.
+            if (querySettings.EnsureStableOrdering &&
+                (IsAvailableODataQueryOption(Skip, AllowedQueryOptions.Skip) ||
+                 IsAvailableODataQueryOption(Top, AllowedQueryOptions.Top) ||
+                 querySettings.PageSize.HasValue))
             {
-                take = Math.Min(Top.Value, take ?? int.MaxValue);
+                // If there is no OrderBy present, we manufacture a default.
+                // If an OrderBy is already present, we add any missing
+                // properties necessary to make a stable sort.
+                // Instead of failing early here if we cannot generate the OrderBy,
+                // let the IQueryable backend fail (if it has to).
+                orderBy = orderBy == null
+                            ? GenerateDefaultOrderBy(Context)
+                            : EnsureStableSortOrderBy(orderBy, Context);
             }
-            if (take.HasValue)
+
+            if (IsAvailableODataQueryOption(orderBy, AllowedQueryOptions.OrderBy))
             {
-                query = ExpressionHelpers.Take(query, take.Value, Context.ElementClrType, false);
+                result = orderBy.ApplyTo(result, querySettings);
             }
+
+            if (IsAvailableODataQueryOption(Skip, AllowedQueryOptions.Skip))
+            {
+                result = Skip.ApplyTo(result, querySettings);
+            }
+
+            if (IsAvailableODataQueryOption(Top, AllowedQueryOptions.Top))
+            {
+                result = Top.ApplyTo(result, querySettings);
+            }
+
+            AddAutoExpandProperties();
 
             if (SelectExpand != null)
             {
-                query = SelectExpand.ApplyTo(query, querySettings, _assemblyProvider);
+                var tempResult = ApplySelectExpand(result, querySettings);
+                if (tempResult != default(IQueryable))
+                {
+                    result = tempResult;
+                }
             }
 
-            return query;
+            if (querySettings.PageSize.HasValue)
+            {
+                bool resultsLimited;
+                result = LimitResults(result, querySettings.PageSize.Value, out resultsLimited);
+                if (resultsLimited)
+                {
+                    string encodedUrl = Request.GetEncodedUrl();
+
+                    if (!string.IsNullOrEmpty(encodedUrl) && new UriBuilder(encodedUrl).Uri.IsAbsoluteUri && Request.ODataProperties().NextLink == null)
+                    {
+                        Uri nextPageLink = Request.GetNextPageLink(querySettings.PageSize.Value);
+                        Request.ODataProperties().NextLink = nextPageLink;
+                    }
+                }
+            }
+
+            return result;
         }
 
+        /// <summary>
+        /// Apply the individual query to the given IQueryable in the right order.
+        /// </summary>
+        /// <param name="entity">The original entity.</param>
+        /// <param name="querySettings">The <see cref="ODataQuerySettings"/> that contains all the query application related settings.</param>
+        /// <param name="ignoreQueryOptions">The query parameters that are already applied in queries.</param>  
+        /// <returns>The new entity after the $select and $expand query has been applied to.</returns>     
+        /// <remarks>Only $select and $expand query options can be applied on single entities. This method throws if the query contains any other
+        /// query options.</remarks>
+        public virtual object ApplyTo(object entity, ODataQuerySettings querySettings, AllowedQueryOptions ignoreQueryOptions)
+        {
+            _ignoreQueryOptions = ignoreQueryOptions;
+            return ApplyTo(entity, new ODataQuerySettings());
+        }
+
+        /// <summary>
+        /// Applies the query to the given entity using the given <see cref="ODataQuerySettings"/>.
+        /// </summary>
+        /// <param name="entity">The original entity.</param>
+        /// <param name="querySettings">The <see cref="ODataQuerySettings"/> that contains all the query application related settings.</param>
+        /// <returns>The new entity after the $select and $expand query has been applied to.</returns>
+        /// <remarks>Only $select and $expand query options can be applied on single entities. This method throws if the query contains any other
+        /// query options.</remarks>
+        public virtual object ApplyTo(object entity, ODataQuerySettings querySettings)
+        {
+            if (entity == null)
+            {
+                throw Error.ArgumentNull("entity");
+            }
+            if (querySettings == null)
+            {
+                throw Error.ArgumentNull("querySettings");
+            }
+
+            if (Filter != null || OrderBy != null || Top != null || Skip != null || Count != null)
+            {
+                throw Error.InvalidOperation(SRResources.NonSelectExpandOnSingleEntity);
+            }
+
+            AddAutoExpandProperties();
+
+            if (SelectExpand != null)
+            {
+                var result = ApplySelectExpand(entity, querySettings);
+                if (result != default(object))
+                {
+                    return result;
+                }
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Validate all OData queries, including $skip, $top, $orderby and $filter, based on the given <paramref name="validationSettings"/>.
+        /// It throws an ODataException if validation failed.
+        /// </summary>
+        /// <param name="validationSettings">The <see cref="ODataValidationSettings"/> instance which contains all the validation settings.</param>
+        public virtual void Validate(ODataValidationSettings validationSettings)
+        {
+            if (validationSettings == null)
+            {
+                throw Error.ArgumentNull("validationSettings");
+            }
+
+            if (Validator != null)
+            {
+                Validator.Validate(this, validationSettings);
+            }
+        }
+
+        private static void ThrowIfEmpty(string queryValue, string queryName)
+        {
+            if (string.IsNullOrWhiteSpace(queryValue))
+            {
+                throw new ODataException(Error.Format(SRResources.QueryCannotBeEmpty, queryName));
+            }
+        }
+
+        // Returns a sorted list of all properties that may legally appear
+        // in an OrderBy.  If the entity type has keys, all are returned.
+        // Otherwise, when no keys are present, all primitive properties are returned.
+        private static IEnumerable<IEdmStructuralProperty> GetAvailableOrderByProperties(ODataQueryContext context)
+        {
+            Contract.Assert(context != null);
+
+            IEdmEntityType entityType = context.ElementType as IEdmEntityType;
+            if (entityType != null)
+            {
+                IEnumerable<IEdmStructuralProperty> properties =
+                    entityType.Key().Any()
+                        ? entityType.Key()
+                        : entityType
+                            .StructuralProperties()
+                            .Where(property => property.Type.IsPrimitive());
+
+                // Sort properties alphabetically for stable sort
+                return properties.OrderBy(property => property.Name);
+            }
+            else
+            {
+                return Enumerable.Empty<IEdmStructuralProperty>();
+            }
+        }
+
+        // Generates the OrderByQueryOption to use by default for $skip or $top
+        // when no other $orderby is available.  It will produce a stable sort.
+        // This may return a null if there are no available properties.
+        private static OrderByQueryOption GenerateDefaultOrderBy(ODataQueryContext context)
+        {
+            string orderByRaw = string.Empty;
+            if (EdmLibHelpers.IsDynamicTypeWrapper(context.ElementClrType))
+            {
+                orderByRaw = string.Join(",",
+                    context.ElementClrType.GetProperties()
+                        .Where(property => EdmLibHelpers.GetEdmPrimitiveTypeOrNull(property.PropertyType) != null)
+                        .Select(property => property.Name));
+            }
+            else
+            {
+                orderByRaw = string.Join(",",
+                    GetAvailableOrderByProperties(context)
+                        .Select(property => property.Name));
+            }
+
+            return string.IsNullOrEmpty(orderByRaw)
+                    ? null
+                    : new OrderByQueryOption(orderByRaw, context);
+        }
+
+        /// <summary>
+        /// Ensures the given <see cref="OrderByQueryOption"/> will produce a stable sort.
+        /// If it will, the input <paramref name="orderBy"/> will be returned
+        /// unmodified.  If the given <see cref="OrderByQueryOption"/> will not produce a
+        /// stable sort, a new <see cref="OrderByQueryOption"/> instance will be created
+        /// and returned.
+        /// </summary>
+        /// <param name="orderBy">The <see cref="OrderByQueryOption"/> to evaluate.</param>
+        /// <param name="context">The <see cref="ODataQueryContext"/>.</param>
+        /// <returns>An <see cref="OrderByQueryOption"/> that will produce a stable sort.</returns>
+        private static OrderByQueryOption EnsureStableSortOrderBy(OrderByQueryOption orderBy, ODataQueryContext context)
+        {
+            Contract.Assert(orderBy != null);
+            Contract.Assert(context != null);
+
+            // Strategy: create a hash of all properties already used in the given OrderBy
+            // and remove them from the list of properties we need to add to make the sort stable.
+            HashSet<string> usedPropertyNames =
+                new HashSet<string>(orderBy.OrderByNodes.OfType<OrderByPropertyNode>().Select(node => node.Property.Name));
+
+            IEnumerable<IEdmStructuralProperty> propertiesToAdd = GetAvailableOrderByProperties(context).Where(prop => !usedPropertyNames.Contains(prop.Name));
+
+            if (propertiesToAdd.Any())
+            {
+                // The existing query options has too few properties to create a stable sort.
+                // Clone the given one and add the remaining properties to end, thereby making
+                // the sort stable but preserving the user's original intent for the major
+                // sort order.
+                orderBy = new OrderByQueryOption(orderBy);
+
+                foreach (IEdmStructuralProperty property in propertiesToAdd)
+                {
+                    orderBy.OrderByNodes.Add(new OrderByPropertyNode(property, OrderByDirection.Ascending));
+                }
+            }
+
+            return orderBy;
+        }
+
+        internal static IQueryable LimitResults(IQueryable queryable, int limit, out bool resultsLimited)
+        {
+            MethodInfo genericMethod = _limitResultsGenericMethod.MakeGenericMethod(queryable.ElementType);
+            object[] args = new object[] { queryable, limit, null };
+            IQueryable results = genericMethod.Invoke(null, args) as IQueryable;
+            resultsLimited = (bool)args[2];
+            return results;
+        }
+
+        /// <summary>
+        /// Limits the query results to a maximum number of results.
+        /// </summary>
+        /// <typeparam name="T">The entity CLR type</typeparam>
+        /// <param name="queryable">The queryable to limit.</param>
+        /// <param name="limit">The query result limit.</param>
+        /// <param name="resultsLimited"><c>true</c> if the query results were limited; <c>false</c> otherwise</param>
+        /// <returns>The limited query results.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Justification = "Not intended for public use, only public to enable invokation without security issues.")]
+        public static IQueryable<T> LimitResults<T>(IQueryable<T> queryable, int limit, out bool resultsLimited)
+        {
+            TruncatedCollection<T> truncatedCollection = new TruncatedCollection<T>(queryable, limit);
+            resultsLimited = truncatedCollection.IsTruncated;
+            return truncatedCollection.AsQueryable();
+        }
+
+        //internal virtual ETag GetETag(EntityTagHeaderValue etagHeaderValue)
+        //{
+        //    return Request.GetETag(etagHeaderValue);
+        //}
+
+        internal void AddAutoExpandProperties()
+        {
+            var autoExpandRawValue = GetAutoExpandRawValue();
+            if (autoExpandRawValue != null && !autoExpandRawValue.Equals(RawValues.Expand))
+            {
+                IDictionary<string, string> queryParameters =
+                   Request.GetQueryNameValuePairs().ToDictionary(p => p.Key, p => p.Value);
+                queryParameters["$expand"] = autoExpandRawValue;
+                _queryOptionParser = new ODataQueryOptionParser(
+                    Context.Model,
+                    Context.ElementType,
+                    Context.NavigationSource,
+                    queryParameters);
+                var originalSelectExpand = SelectExpand;
+                SelectExpand = new SelectExpandQueryOption(RawValues.Select, autoExpandRawValue, Context,
+                    _queryOptionParser, Request);
+                if (originalSelectExpand != null && originalSelectExpand.LevelsMaxLiteralExpansionDepth > 0)
+                {
+                    SelectExpand.LevelsMaxLiteralExpansionDepth = originalSelectExpand.LevelsMaxLiteralExpansionDepth;
+                }
+            }
+        }
+
+        private string GetAutoExpandRawValue()
+        {
+            var expandRawValue = RawValues.Expand;
+            IEdmEntityType baseEntityType = Context.ElementType as IEdmEntityType;
+            var autoExpandRawValue = string.Empty;
+            var autoExpandNavigationProperties = EdmLibHelpers.GetAutoExpandNavigationProperties(baseEntityType,
+                Context.Model);
+
+            foreach (var property in autoExpandNavigationProperties)
+            {
+                if (!string.IsNullOrEmpty(autoExpandRawValue))
+                {
+                    autoExpandRawValue += ",";
+                }
+
+                if (property.DeclaringEntityType() != baseEntityType)
+                {
+                    autoExpandRawValue += string.Format(CultureInfo.InvariantCulture, "{0}/",
+                        property.DeclaringEntityType().FullTypeName());
+                }
+
+                autoExpandRawValue += property.Name;
+            }
+
+            if (!string.IsNullOrEmpty(autoExpandRawValue))
+            {
+                if (!string.IsNullOrEmpty(expandRawValue))
+                {
+                    expandRawValue = string.Format(CultureInfo.InvariantCulture, "{0},{1}",
+                        autoExpandRawValue, expandRawValue);
+                }
+                else
+                {
+                    expandRawValue = autoExpandRawValue;
+                }
+            }
+            return expandRawValue;
+        }
+
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+            Justification = "Need lower case string here.")]
         private void BuildQueryOptions(IDictionary<string, string> queryParameters)
         {
-            foreach (var kvp in queryParameters)
+            foreach (KeyValuePair<string, string> kvp in queryParameters)
             {
                 switch (kvp.Key.ToLowerInvariant())
                 {
@@ -186,43 +648,28 @@ namespace Microsoft.AspNetCore.OData.Query
                     case "$orderby":
                         ThrowIfEmpty(kvp.Value, "$orderby");
                         RawValues.OrderBy = kvp.Value;
+                        OrderBy = new OrderByQueryOption(kvp.Value, Context, _queryOptionParser);
                         break;
                     case "$top":
                         ThrowIfEmpty(kvp.Value, "$top");
                         RawValues.Top = kvp.Value;
-                        Top = TryParseNonNegativeInteger("$top", kvp.Value);
+                        Top = new TopQueryOption(kvp.Value, Context, _queryOptionParser);
                         break;
                     case "$skip":
                         ThrowIfEmpty(kvp.Value, "$skip");
                         RawValues.Skip = kvp.Value;
-                        Skip = TryParseNonNegativeInteger("$skip", kvp.Value);
+                        Skip = new SkipQueryOption(kvp.Value, Context, _queryOptionParser);
                         break;
                     case "$select":
                         RawValues.Select = kvp.Value;
                         break;
                     case "$count":
-                        // According to the OData 4 protocol, the value of this query option is optional:
-                        // http://docs.oasis-open.org/odata/odata/v4.0/errata02/os/complete/part1-protocol/odata-v4.0-errata02-os-part1-protocol-complete.html#_Toc406398308
-                        // "A $count query option with a value of false (or not specified) hints that the service SHOULD NOT return a count."
+                        ThrowIfEmpty(kvp.Value, "$count");
                         RawValues.Count = kvp.Value;
-                        if (string.IsNullOrWhiteSpace(kvp.Value) == false)
-                        {
-                            bool count;
-                            if (bool.TryParse(kvp.Value, out count))
-                            {
-                                Count = count;
-                            }
-                            else
-                            {
-                                throw new ODataException($"If a value for the query '$count' is specified, it must have a value of '{bool.TrueString}' or '{bool.FalseString}'");
-                            }
-                        }
+                        Count = new CountQueryOption(kvp.Value, Context, _queryOptionParser);
                         break;
                     case "$expand":
                         RawValues.Expand = kvp.Value;
-                        // TODO Parse the select statement if any
-                        Request.ODataProperties().SelectExpandClause = _queryOptionParser.ParseSelectAndExpand();
-                        SelectExpand = new SelectExpandQueryOption(string.Empty, kvp.Value, Context, _queryOptionParser, Request);
                         break;
                     case "$format":
                         RawValues.Format = kvp.Value;
@@ -230,34 +677,81 @@ namespace Microsoft.AspNetCore.OData.Query
                     case "$skiptoken":
                         RawValues.SkipToken = kvp.Value;
                         break;
+                    case "$deltatoken":
+                        RawValues.DeltaToken = kvp.Value;
+                        break;
+                    case "$apply":
+                        throw new NotImplementedException("$apply is not implemented currently");
+                        //ThrowIfEmpty(kvp.Value, "$apply");
+                        //RawValues.Apply = kvp.Value;
+                        //Apply = new ApplyQueryOption(kvp.Value, Context, _queryOptionParser);
+                        break;
+                    default:
+                        // we don't throw if we can't recognize the query
+                        break;
                 }
             }
+
+            if (RawValues.Select != null || RawValues.Expand != null)
+            {
+                SelectExpand = new SelectExpandQueryOption(RawValues.Select, RawValues.Expand,
+                    Context, _queryOptionParser, Request);
+            }
+
+            if (ODataCountMediaTypeMapping.IsCountRequest(Request))
+            {
+                Count = new CountQueryOption(
+                    "true",
+                    Context,
+                    new ODataQueryOptionParser(
+                        Context.Model,
+                        Context.ElementType,
+                        Context.NavigationSource,
+                        new Dictionary<string, string> { { "$count", "true" } }));
+            }
         }
 
-        private static void ThrowIfEmpty(string queryValue, string queryName)
+        private bool IsAvailableODataQueryOption(object queryOption, AllowedQueryOptions queryOptionFlag)
         {
-            if (string.IsNullOrWhiteSpace(queryValue))
-            {
-                throw new ODataException(Error.Format("Query '{0}' cannot be empty", queryName));
-            }
+            return ((queryOption != null) && ((_ignoreQueryOptions & queryOptionFlag) == AllowedQueryOptions.None));
         }
 
-        private static int TryParseNonNegativeInteger(string parameterName,
-            string value,
-            System.Globalization.NumberStyles styles = System.Globalization.NumberStyles.Any,
-            IFormatProvider provider = null)
+        private T ApplySelectExpand<T>(T entity, ODataQuerySettings querySettings)
         {
-            provider = provider ?? CultureInfo.InvariantCulture;
-            int n;
-            if (int.TryParse(value, styles, provider, out n) == false)
+            var result = default(T);
+            bool selectAvailable = IsAvailableODataQueryOption(SelectExpand.RawSelect, AllowedQueryOptions.Select);
+            bool expandAvailable = IsAvailableODataQueryOption(SelectExpand.RawExpand, AllowedQueryOptions.Expand);
+            if (selectAvailable || expandAvailable)
             {
-                throw new ODataException($"Query '{parameterName}' must be an integer.");
+                if ((!selectAvailable && SelectExpand.RawSelect != null) ||
+                    (!expandAvailable && SelectExpand.RawExpand != null))
+                {
+                    SelectExpand = new SelectExpandQueryOption(
+                        selectAvailable ? RawValues.Select : null,
+                        expandAvailable ? RawValues.Expand : null,
+                        SelectExpand.Context);
+                }
+
+                SelectExpandClause processedClause = SelectExpand.ProcessLevels();
+                SelectExpandQueryOption newSelectExpand = new SelectExpandQueryOption(
+                    SelectExpand.RawSelect,
+                    SelectExpand.RawExpand,
+                    SelectExpand.Context,
+                    processedClause);
+
+                Request.ODataProperties().SelectExpandClause = processedClause;
+
+                var type = typeof(T);
+                if (type == typeof(IQueryable))
+                {
+                    result = (T)newSelectExpand.ApplyTo((IQueryable)entity, querySettings);
+                }
+                else if (type == typeof(object))
+                {
+                    result = (T)newSelectExpand.ApplyTo(entity, querySettings);
+                }
             }
-            if (n < 0)
-            {
-                throw new ODataException($"Query '{parameterName}' must be an non-negative integer.");
-            }
-            return n;
+            return result;
         }
     }
 }

@@ -520,5 +520,32 @@ namespace Microsoft.AspNetCore.OData.Formatter
                     String.Join("_", type.GetGenericArguments().Select(t => MangleClrTypeName(t))));
             }
         }
+
+        public static bool IsDynamicTypeWrapper(Type type)
+        {
+            return (type != null && typeof(DynamicTypeWrapper).IsAssignableFrom(type));
+        }
+
+        public static IEnumerable<IEdmNavigationProperty> GetAutoExpandNavigationProperties(
+            IEdmEntityType entityType, IEdmModel edmModel)
+        {
+            List<IEdmNavigationProperty> autoExpandNavigationProperties = new List<IEdmNavigationProperty>();
+            if (entityType != null)
+            {
+                var navigationProperties = entityType.NavigationProperties();
+                if (navigationProperties != null)
+                {
+                    foreach (var navigationProperty in navigationProperties)
+                    {
+                        if (IsAutoExpand(navigationProperty, edmModel))
+                        {
+                            autoExpandNavigationProperties.Add(navigationProperty);
+                        }
+                    }
+                }
+            }
+
+            return autoExpandNavigationProperties;
+        }
     }
 }

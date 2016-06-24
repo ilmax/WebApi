@@ -99,12 +99,12 @@ namespace Microsoft.AspNetCore.OData.Query
         /// <summary>
         /// Gets the list of EDM navigation properties to be expanded in the response.
         /// </summary>
-        public IDictionary<IEdmNavigationProperty, SelectExpandClause> ExpandedNavigationProperties { get; private set; }
+        public IDictionary<IEdmNavigationProperty, SelectExpandClause> ExpandedNavigationProperties { get; }
 
         /// <summary>
         /// Gets the list of dynamic properties to select.
         /// </summary>
-        public ISet<string> SelectedDynamicProperties { get; private set; }
+        public ISet<string> SelectedDynamicProperties { get; }
 
         /// <summary>
         /// Gets the flag to indicate the dynamic property to be included in the response or not.

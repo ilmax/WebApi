@@ -67,6 +67,11 @@ namespace Microsoft.AspNetCore.OData.Query
         DeltaToken = 0x200,
 
         /// <summary>
+        /// A value that corresponds to allowing the $apply query option.
+        /// </summary>
+        Apply = 0x400,
+
+        /// <summary>
         /// A value that corresponds to the default query options supported by <see cref="EnableQueryAttribute"/>.
         /// </summary>
         Supported = Filter | OrderBy | Top | Skip | Count | Select | Expand | Format,
@@ -74,6 +79,6 @@ namespace Microsoft.AspNetCore.OData.Query
         /// <summary>
         /// A value that corresponds to allowing all query options.
         /// </summary>
-        All = Filter | Expand | Select | OrderBy | Top | Skip | Count | Format | SkipToken | DeltaToken
+        All = Filter | Expand | Select | OrderBy | Top | Skip | Count | Format | SkipToken | DeltaToken,
     }
 }

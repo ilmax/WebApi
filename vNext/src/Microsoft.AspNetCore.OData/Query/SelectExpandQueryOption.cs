@@ -34,6 +34,7 @@ namespace Microsoft.AspNetCore.OData.Query
         /// <param name="expand">The $expand query parameter value.</param>
         /// <param name="context">The <see cref="ODataQueryContext"/> which contains the <see cref="IEdmModel"/> and some type information.</param>
         /// <param name="queryOptionParser">The <see cref="ODataQueryOptionParser"/> which is used to parse the query option.</param>
+        /// <param name="request">The current <see cref="HttpRequest"/></param>
         public SelectExpandQueryOption(string select, string expand, ODataQueryContext context,
             ODataQueryOptionParser queryOptionParser, HttpRequest request)
         {
@@ -110,7 +111,7 @@ namespace Microsoft.AspNetCore.OData.Query
         /// <summary>
         ///  Gets the given <see cref="ODataQueryContext"/>.
         /// </summary>
-        public ODataQueryContext Context { get; private set; }
+        public ODataQueryContext Context { get; }
 
         /// <summary>
         /// Gets the raw $select value.

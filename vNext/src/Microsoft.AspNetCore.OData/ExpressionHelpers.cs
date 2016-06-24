@@ -22,6 +22,13 @@ namespace Microsoft.AspNetCore.OData
             return (long)countMethod.Invoke(null, new object[] { query });
         }
 
+        public static Func<long> CountFunc(IQueryable query, Type type)
+        {
+            MethodInfo countMethod = ExpressionHelperMethods.QueryableCountGeneric.MakeGenericMethod(type);
+            Func<long> func = () => (long)countMethod.Invoke(null, new object[] { query });
+            return func;
+        }
+
         public static IQueryable Skip(IQueryable query, int count, Type type, bool parameterize)
         {
             MethodInfo skipMethod = ExpressionHelperMethods.QueryableSkipGeneric.MakeGenericMethod(type);
