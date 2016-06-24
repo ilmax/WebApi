@@ -48,29 +48,19 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// </summary>
         public IEdmEntitySetBase EntitySetBase
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the name of the entity set.
         /// </summary>
         public string EntitySetName
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.EntitySet;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.EntitySet;
 
         /// <summary>
         /// Gets the EDM type for this segment.

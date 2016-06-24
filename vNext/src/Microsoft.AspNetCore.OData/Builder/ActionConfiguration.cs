@@ -28,16 +28,10 @@ namespace Microsoft.AspNetCore.OData.Builder
         }
 
         /// <inheritdoc />
-        public override ProcedureKind Kind
-        {
-            get { return ProcedureKind.Action; }
-        }
+        public override ProcedureKind Kind => ProcedureKind.Action;
 
         /// <inheritdoc />
-        public override bool IsSideEffecting
-        {
-            get { return true; }
-        }
+        public override bool IsSideEffecting => true;
 
         /// <summary>
         /// Register a factory that creates actions links.
@@ -46,7 +40,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
             if (actionLinkFactory == null)
             {
-                throw new ArgumentNullException("actionLinkFactory");
+                throw new ArgumentNullException(nameof(actionLinkFactory));
             }
             if (!IsBindable || BindingParameter.TypeConfiguration.Kind != EdmTypeKind.Entity)
             {
@@ -184,9 +178,9 @@ namespace Microsoft.AspNetCore.OData.Builder
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In keeping with rest of API")]
         public ActionConfiguration ReturnsEntityViaEntitySetPath<TEntityType>(string entitySetPath) where TEntityType : class
         {
-            if (String.IsNullOrEmpty(entitySetPath))
+            if (string.IsNullOrEmpty(entitySetPath))
             {
-                throw new ArgumentNullException("entitySetPath");
+                throw new ArgumentNullException(nameof(entitySetPath));
             }
             ReturnsEntityViaEntitySetPathImplementation<TEntityType>(entitySetPath.Split('/'));
             return this;
@@ -212,9 +206,9 @@ namespace Microsoft.AspNetCore.OData.Builder
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Justification = "In keeping with rest of API")]
         public ActionConfiguration ReturnsCollectionViaEntitySetPath<TElementEntityType>(string entitySetPath) where TElementEntityType : class
         {
-            if (String.IsNullOrEmpty(entitySetPath))
+            if (string.IsNullOrEmpty(entitySetPath))
             {
-                throw new ArgumentNullException("entitySetPath");
+                throw new ArgumentNullException(nameof(entitySetPath));
             }
             ReturnsCollectionViaEntitySetPathImplementation<TElementEntityType>(entitySetPath.Split('/'));
             return this;

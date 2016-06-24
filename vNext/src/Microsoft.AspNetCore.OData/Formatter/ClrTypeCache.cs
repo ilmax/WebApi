@@ -9,7 +9,7 @@ namespace Microsoft.AspNetCore.OData.Formatter
 {
     internal class ClrTypeCache
     {
-        private ConcurrentDictionary<Type, IEdmTypeReference> _cache =
+        private readonly ConcurrentDictionary<Type, IEdmTypeReference> _cache =
             new ConcurrentDictionary<Type, IEdmTypeReference>();
 
         public IEdmTypeReference GetEdmType(Type clrType, IEdmModel model)

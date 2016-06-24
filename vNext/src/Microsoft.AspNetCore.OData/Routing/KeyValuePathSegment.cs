@@ -33,9 +33,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// </summary>
         public string Value
         {
-            get;
-            private set;
-        }
+            get; }
 
         internal IDictionary<string, string> Values
         {
@@ -53,13 +51,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Key;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Key;
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)

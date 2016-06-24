@@ -20,7 +20,7 @@ namespace Microsoft.AspNetCore.OData.Routing
     /// </summary>
     public class BoundFunctionPathSegment : ODataPathSegment
     {
-        private IEdmModel _edmModel;
+        private readonly IEdmModel _edmModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BoundFunctionPathSegment" /> class.
@@ -43,7 +43,7 @@ namespace Microsoft.AspNetCore.OData.Routing
 
         internal BoundFunctionPathSegment(string functionName, IDictionary<string, string> parameterValues)
         {
-            Contract.Assert(!String.IsNullOrEmpty(functionName));
+            Contract.Assert(!string.IsNullOrEmpty(functionName));
 
             Values = parameterValues ?? new Dictionary<string, string>();
             FunctionName = functionName;
@@ -52,25 +52,19 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Function;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Function;
 
         /// <summary>
         /// Gets the function being invoked.
         /// </summary>
-        public IEdmFunction Function { get; private set; }
+        public IEdmFunction Function { get; }
 
         /// <summary>
         /// Gets the name of the function.
         /// </summary>
-        public string FunctionName { get; private set; }
+        public string FunctionName { get; }
 
-        internal IDictionary<string, string> Values { get; private set; }
+        internal IDictionary<string, string> Values { get; }
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)
@@ -145,7 +139,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <returns> The value of the parameter. </returns>
         public object GetParameterValue(string parameterName)
         {
-            if (String.IsNullOrEmpty(parameterName))
+            if (string.IsNullOrEmpty(parameterName))
             {
                 throw Error.ArgumentNullOrEmpty("parameterName");
             }
@@ -184,8 +178,8 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// </returns>
         public override string ToString()
         {
-            IEnumerable<string> parameters = Values.Select(v => String.Format(CultureInfo.InvariantCulture, "{0}={1}", v.Key, v.Value));
-            return String.Format(CultureInfo.InvariantCulture, "{0}({1})", FunctionName, String.Join(",", parameters));
+            IEnumerable<string> parameters = Values.Select(v => string.Format(CultureInfo.InvariantCulture, "{0}={1}", v.Key, v.Value));
+            return string.Format(CultureInfo.InvariantCulture, "{0}({1})", FunctionName, string.Join(",", parameters));
         }
 
         /// <inheritdoc />

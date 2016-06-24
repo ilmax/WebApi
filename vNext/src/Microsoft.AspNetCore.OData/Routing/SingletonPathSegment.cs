@@ -34,7 +34,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <param name="singletonName">Name of the singleton.</param>
         public SingletonPathSegment(string singletonName)
         {
-            if (String.IsNullOrEmpty(singletonName))
+            if (string.IsNullOrEmpty(singletonName))
             {
                 throw Error.ArgumentNullOrEmpty("singletonName");
             }
@@ -45,33 +45,22 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the singleton represented by this segment.
         /// </summary>
-        public IEdmSingleton Singleton { get; private set; }
+        public IEdmSingleton Singleton { get; }
 
         /// <summary>
         /// Gets the name of the singleton.
         /// </summary>
-        public string SingletonName { get; private set; }
+        public string SingletonName { get; }
 
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Singleton;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Singleton;
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)
         {
-            if (Singleton != null)
-            {
-                return Singleton.EntityType();
-            }
-
-            return null;
+            return Singleton?.EntityType();
         }
 
         /// <inheritdoc/>

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -64,12 +63,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <returns>The converted name.</returns>
         public virtual string ToLowerCamelCase(string name)
         {
-            if (String.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 return name;
             }
 
-            if (!Char.IsUpper(name[0]))
+            if (!char.IsUpper(name[0]))
             {
                 return name;
             }
@@ -78,14 +77,14 @@ namespace Microsoft.AspNetCore.OData.Builder
 
             for (int index = 0; index < name.Length; index++)
             {
-                if (index != 0 && index + 1 < name.Length && !Char.IsUpper(name[index + 1]))
+                if (index != 0 && index + 1 < name.Length && !char.IsUpper(name[index + 1]))
                 {
                     stringBuilder.Append(name.Substring(index));
                     break;
                 }
                 else
                 {
-                    stringBuilder.Append(Char.ToLowerInvariant(name[index]));
+                    stringBuilder.Append(char.ToLowerInvariant(name[index]));
                 }
             }
 
@@ -102,7 +101,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             {
                 DataMemberAttribute attribute = property.PropertyInfo.GetCustomAttribute<DataMemberAttribute>(inherit: false);
 
-                if (attribute != null && !String.IsNullOrWhiteSpace(attribute.Name))
+                if (attribute != null && !string.IsNullOrWhiteSpace(attribute.Name))
                 {
                     return _options.HasFlag(NameResolverOptions.ProcessDataMemberAttributePropertyNames);
                 }

@@ -14,13 +14,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Value;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Value;
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)

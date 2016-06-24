@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.OData.Common;
 
 namespace Microsoft.AspNetCore.OData.Builder
 {
@@ -17,7 +16,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public abstract class ProcedureConfiguration
     {
-        private List<ParameterConfiguration> _parameters = new List<ParameterConfiguration>();
+        private readonly List<ParameterConfiguration> _parameters = new List<ParameterConfiguration>();
         private BindingParameterConfiguration _bindingParameter;
 
         /// <summary>
@@ -75,10 +74,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// The FullyQualifiedName is the Name further qualified using the Namespace.
         /// </summary>
-        public string FullyQualifiedName
-        {
-            get { return ModelBuilder.Namespace + "." + Name; }
-        }
+        public string FullyQualifiedName => ModelBuilder.Namespace + "." + Name;
 
         /// <summary>
         /// The type returned when the procedure is invoked.
@@ -104,10 +100,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// Get the bindingParameter. 
         /// <remarks>Null means the procedure has no bindingParameter.</remarks>
         /// </summary>
-        public virtual BindingParameterConfiguration BindingParameter
-        {
-            get { return _bindingParameter; }
-        }
+        public virtual BindingParameterConfiguration BindingParameter => _bindingParameter;
 
         /// <summary>
         /// The parameters the procedure takes
@@ -130,13 +123,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Can the procedure be bound to a URL representing the BindingParameter.
         /// </summary>
-        public virtual bool IsBindable
-        {
-            get
-            {
-                return _bindingParameter != null;
-            }
-        }
+        public virtual bool IsBindable => _bindingParameter != null;
 
         /// <summary>
         /// Sets the return type to a single EntityType instance.

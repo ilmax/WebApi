@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Common;
 using Microsoft.OData.Edm;
 

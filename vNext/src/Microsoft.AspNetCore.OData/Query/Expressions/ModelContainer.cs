@@ -15,8 +15,8 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
     /// </summary>
     internal static class ModelContainer
     {
-        private static ConcurrentDictionary<IEdmModel, string> _map = new ConcurrentDictionary<IEdmModel, string>();
-        private static ConcurrentDictionary<string, IEdmModel> _reverseMap = new ConcurrentDictionary<string, IEdmModel>();
+        private static readonly ConcurrentDictionary<IEdmModel, string> _map = new ConcurrentDictionary<IEdmModel, string>();
+        private static readonly ConcurrentDictionary<string, IEdmModel> _reverseMap = new ConcurrentDictionary<string, IEdmModel>();
 
         public static string GetModelID(IEdmModel model)
         {

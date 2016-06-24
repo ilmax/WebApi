@@ -22,12 +22,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         private static readonly Version _defaultDataServiceVersion = EdmConstants.EdmVersion4;
         private static readonly Version _defaultMaxDataServiceVersion = EdmConstants.EdmVersion4;
 
-        private Dictionary<Type, EnumTypeConfiguration> _enumTypes = new Dictionary<Type, EnumTypeConfiguration>();
-        private Dictionary<Type, StructuralTypeConfiguration> _structuralTypes = new Dictionary<Type, StructuralTypeConfiguration>();
-        private Dictionary<string, INavigationSourceConfiguration> _navigationSources
+        private readonly Dictionary<Type, EnumTypeConfiguration> _enumTypes = new Dictionary<Type, EnumTypeConfiguration>();
+        private readonly Dictionary<Type, StructuralTypeConfiguration> _structuralTypes = new Dictionary<Type, StructuralTypeConfiguration>();
+        private readonly Dictionary<string, INavigationSourceConfiguration> _navigationSources
             = new Dictionary<string, INavigationSourceConfiguration>();
-        private Dictionary<Type, PrimitiveTypeConfiguration> _primitiveTypes = new Dictionary<Type, PrimitiveTypeConfiguration>();
-        private List<ProcedureConfiguration> _procedures = new List<ProcedureConfiguration>();
+        private readonly Dictionary<Type, PrimitiveTypeConfiguration> _primitiveTypes = new Dictionary<Type, PrimitiveTypeConfiguration>();
+        private readonly List<ProcedureConfiguration> _procedures = new List<ProcedureConfiguration>();
 
         private Version _dataServiceVersion;
         private Version _maxDataServiceVersion;
@@ -94,50 +94,32 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the collection of EDM entity sets in the model to be built.
         /// </summary>
-        public virtual IEnumerable<EntitySetConfiguration> EntitySets
-        {
-            get { return _navigationSources.Values.OfType<EntitySetConfiguration>(); }
-        }
+        public virtual IEnumerable<EntitySetConfiguration> EntitySets => _navigationSources.Values.OfType<EntitySetConfiguration>();
 
         /// <summary>
         /// Gets the collection of EDM types in the model to be built.
         /// </summary>
-        public virtual IEnumerable<StructuralTypeConfiguration> StructuralTypes
-        {
-            get { return _structuralTypes.Values; }
-        }
+        public virtual IEnumerable<StructuralTypeConfiguration> StructuralTypes => _structuralTypes.Values;
 
         /// <summary>
         /// Gets the collection of EDM types in the model to be built.
         /// </summary>
-        public virtual IEnumerable<EnumTypeConfiguration> EnumTypes
-        {
-            get { return _enumTypes.Values; }
-        }
+        public virtual IEnumerable<EnumTypeConfiguration> EnumTypes => _enumTypes.Values;
 
         /// <summary>
         /// Gets the collection of EDM singletons in the model to be built.
         /// </summary>
-        public virtual IEnumerable<SingletonConfiguration> Singletons
-        {
-            get { return _navigationSources.Values.OfType<SingletonConfiguration>(); }
-        }
+        public virtual IEnumerable<SingletonConfiguration> Singletons => _navigationSources.Values.OfType<SingletonConfiguration>();
 
         /// <summary>
         /// Gets the collection of EDM navigation sources (entity sets and singletons) in the model to be built.
         /// </summary>
-        public virtual IEnumerable<INavigationSourceConfiguration> NavigationSources
-        {
-            get { return _navigationSources.Values; }
-        }
+        public virtual IEnumerable<INavigationSourceConfiguration> NavigationSources => _navigationSources.Values;
 
         /// <summary>
         /// Gets the collection of Procedures (i.e. Actions, Functions and ServiceOperations) in the model to be built.
         /// </summary>
-        public virtual IEnumerable<ProcedureConfiguration> Procedures
-        {
-            get { return _procedures; }
-        }
+        public virtual IEnumerable<ProcedureConfiguration> Procedures => _procedures;
 
         /// <summary>
         /// Registers an entity type as part of the model and returns an object that can be used to configure the entity type.

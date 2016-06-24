@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OData.Edm;
 using Microsoft.AspNetCore.OData.Common;
-using Microsoft.AspNetCore.OData.Routing.Conventions;
 
 namespace Microsoft.AspNetCore.OData.Routing
 {
@@ -34,12 +33,12 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// Gets the dictionary representing the mappings from the parameter names in the current function segment to the 
         /// parameter names in route data.
         /// </summary>
-        public IDictionary<string, string> ParameterMappings { get; private set; }
+        public IDictionary<string, string> ParameterMappings { get; }
 
         /// <summary>
         /// Gets the name of the function.
         /// </summary>
-        public string FunctionName { get; private set; }
+        public string FunctionName { get; }
 
         /// <inheritdoc />
         public override bool TryMatch(ODataPathSegment pathSegment, IDictionary<string, object> values)

@@ -8,7 +8,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
     // wraps a constant value so that EntityFramework paramterizes the constant.
     internal abstract class LinqParameterContainer
     {
-        private static ConcurrentDictionary<Type, Func<object, LinqParameterContainer>> _ctors = new ConcurrentDictionary<Type, Func<object, LinqParameterContainer>>();
+        private static readonly ConcurrentDictionary<Type, Func<object, LinqParameterContainer>> _ctors = new ConcurrentDictionary<Type, Func<object, LinqParameterContainer>>();
 
         // the value of the constant.
         public abstract object Property { get; }
@@ -55,10 +55,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
 
             public T TypedProperty { get; set; }
 
-            public override object Property
-            {
-                get { return TypedProperty; }
-            }
+            public override object Property => TypedProperty;
         }
     }
 }

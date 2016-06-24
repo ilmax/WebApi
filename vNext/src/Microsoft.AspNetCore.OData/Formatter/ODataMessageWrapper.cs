@@ -16,9 +16,9 @@ namespace Microsoft.AspNetCore.OData.Formatter
     /// </summary>
     internal class ODataMessageWrapper : IODataRequestMessage, IODataResponseMessage, IODataUrlResolver
     {
-        private Stream _stream;
-        private Dictionary<string, string> _headers;
-        private IDictionary<string, string> _contentIdMapping;
+        private readonly Stream _stream;
+        private readonly Dictionary<string, string> _headers;
+        private readonly IDictionary<string, string> _contentIdMapping;
         private static readonly Regex ContentIdReferencePattern = new Regex(@"\$\d", RegexOptions.Compiled);
 
         public ODataMessageWrapper()
@@ -50,13 +50,7 @@ namespace Microsoft.AspNetCore.OData.Formatter
             _contentIdMapping = contentIdMapping ?? new Dictionary<string, string>();
         }
 
-        public IEnumerable<KeyValuePair<string, string>> Headers
-        {
-            get
-            {
-                return _headers;
-            }
-        }
+        public IEnumerable<KeyValuePair<string, string>> Headers => _headers;
 
         public string Method
         {
@@ -119,7 +113,7 @@ namespace Microsoft.AspNetCore.OData.Formatter
         {
             if (payloadUri == null)
             {
-                throw new ArgumentNullException("payloadUri");
+                throw new ArgumentNullException(nameof(payloadUri));
             }
 
             string originalPayloadUri = payloadUri.OriginalString;

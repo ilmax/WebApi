@@ -1,12 +1,9 @@
-﻿using System;
-using Microsoft.OData.Core.UriParser;
+﻿using Microsoft.OData.Core.UriParser;
 using Microsoft.OData.Core.UriParser.Semantic;
 using Microsoft.AspNetCore.OData.Common;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query.Expressions;
 using Microsoft.OData.Edm;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Microsoft.AspNetCore.OData.Query
 {
@@ -33,7 +30,7 @@ namespace Microsoft.AspNetCore.OData.Query
                 throw Error.ArgumentNull("context");
             }
 
-            if (String.IsNullOrEmpty(rawValue))
+            if (string.IsNullOrEmpty(rawValue))
             {
                 throw Error.ArgumentNullOrEmpty("rawValue");
             }

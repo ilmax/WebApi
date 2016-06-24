@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public class ActionLinkBuilder
     {
-        private Func<EntityInstanceContext, Uri> _actionLinkFactory;
+        private readonly Func<EntityInstanceContext, Uri> _actionLinkFactory;
 
         /// <summary>
         /// Create a new ActionLinkBuilder based on an actionLinkFactory.

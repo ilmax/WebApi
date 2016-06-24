@@ -15,10 +15,8 @@ namespace Microsoft.AspNetCore.OData.Builder.Conventions.Attributes
         // .net 4.5 NotMappedAttribute has the same name.
         private const string EntityFrameworkNotMappedAttributeTypeName = "System.ComponentModel.DataAnnotations.Schema.NotMappedAttribute";
 
-        private static Func<Attribute, bool> _filter = attribute =>
-        {
-            return attribute.GetType().FullName.Equals(EntityFrameworkNotMappedAttributeTypeName, StringComparison.Ordinal);
-        };
+        private static readonly Func<Attribute, bool> _filter = attribute =>
+                attribute.GetType().FullName.Equals(EntityFrameworkNotMappedAttributeTypeName, StringComparison.Ordinal);
 
         public NotMappedAttributeConvention()
             : base(_filter, allowMultiple: false)

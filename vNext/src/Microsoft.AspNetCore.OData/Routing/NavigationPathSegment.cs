@@ -44,31 +44,21 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Navigation;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Navigation;
 
         /// <summary>
         /// Gets the navigation property being accessed by this segment.
         /// </summary>
         public IEdmNavigationProperty NavigationProperty
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the name of the navigation property.
         /// </summary>
         public string NavigationPropertyName
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)

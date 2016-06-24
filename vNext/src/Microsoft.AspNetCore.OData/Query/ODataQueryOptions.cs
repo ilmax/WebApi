@@ -4,11 +4,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.OData.Common;
 using Microsoft.AspNetCore.OData.Extensions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Core;
 using Microsoft.OData.Core.UriParser;
 using Microsoft.OData.Edm;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Globalization;
 
 namespace Microsoft.AspNetCore.OData.Query
@@ -238,7 +236,7 @@ namespace Microsoft.AspNetCore.OData.Query
 
         private static void ThrowIfEmpty(string queryValue, string queryName)
         {
-            if (String.IsNullOrWhiteSpace(queryValue))
+            if (string.IsNullOrWhiteSpace(queryValue))
             {
                 throw new ODataException(Error.Format("Query '{0}' cannot be empty", queryName));
             }

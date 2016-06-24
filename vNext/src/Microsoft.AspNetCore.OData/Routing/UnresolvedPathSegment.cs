@@ -29,22 +29,14 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Unresolved;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Unresolved;
 
         /// <summary>
         /// Gets the unresolved segment value.
         /// </summary>
         public string SegmentValue
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)

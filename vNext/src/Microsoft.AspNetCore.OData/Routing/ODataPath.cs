@@ -18,9 +18,9 @@ namespace Microsoft.AspNetCore.OData.Routing
     [ODataPathParameterBinding]
     public class ODataPath
     {
-        private ReadOnlyCollection<ODataPathSegment> _segments;
-        private IEdmType _edmType;
-        private IEdmNavigationSource _navigationSource;
+        private readonly ReadOnlyCollection<ODataPathSegment> _segments;
+        private readonly IEdmType _edmType;
+        private readonly IEdmNavigationSource _navigationSource;
         private string _pathTemplate;
 
         /// <summary>
@@ -55,24 +55,12 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets or sets the EDM type of the path.
         /// </summary>
-        public IEdmType EdmType
-        {
-            get
-            {
-                return _edmType;
-            }
-        }
+        public IEdmType EdmType => _edmType;
 
         /// <summary>
         /// Gets or sets the navigation source of the path.
         /// </summary>
-        public IEdmNavigationSource NavigationSource
-        {
-            get
-            {
-                return _navigationSource;
-            }
-        }
+        public IEdmNavigationSource NavigationSource => _navigationSource;
 
         /// <summary>
         /// Gets the path template describing the types of segments in the path.
@@ -98,13 +86,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the path segments for the OData path.
         /// </summary>
-        public ReadOnlyCollection<ODataPathSegment> Segments
-        {
-            get
-            {
-                return _segments;
-            }
-        }
+        public ReadOnlyCollection<ODataPathSegment> Segments => _segments;
 
         internal Semantic.ODataPath ODLPath { get; set; }
 

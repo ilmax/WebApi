@@ -85,13 +85,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the navigation targets of <see cref=" NavigationSourceConfiguration"/>.
         /// </summary>
-        public IEnumerable<NavigationPropertyBindingConfiguration> Bindings
-        {
-            get
-            {
-                return _navigationPropertyBindings.Values;
-            }
-        }
+        public IEnumerable<NavigationPropertyBindingConfiguration> Bindings => _navigationPropertyBindings.Values;
 
         /// <summary>
         /// Gets the entity type contained in this navigation source.

@@ -8,7 +8,6 @@ using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.AspNetCore.OData.Common;
-using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.OData.Core;
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Library;
@@ -35,7 +34,7 @@ namespace Microsoft.AspNetCore.OData.Formatter.Deserialization
             }
 
             // dynamic properties have null values
-            IEdmTypeReference propertyType = edmProperty != null ? edmProperty.Type : null;
+            IEdmTypeReference propertyType = edmProperty?.Type;
 
             EdmTypeKind propertyKind;
             object value = ConvertValue(property.Value, ref propertyType, deserializerProvider, readContext,
@@ -280,7 +279,7 @@ namespace Microsoft.AspNetCore.OData.Formatter.Deserialization
             else
             {
                 PropertyInfo property = resource.GetType().GetProperty(propertyName);
-                return property == null ? null : property.PropertyType;
+                return property?.PropertyType;
             }
         }
 

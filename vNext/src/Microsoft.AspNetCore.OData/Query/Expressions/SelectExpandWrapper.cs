@@ -136,7 +136,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
                     if (TryGetPropertyValue(property.Name, out propertyValue))
                     {
                         string mappingName = mapper.MapProperty(property.Name);
-                        if (String.IsNullOrWhiteSpace(mappingName))
+                        if (string.IsNullOrWhiteSpace(mappingName))
                         {
                             throw Error.InvalidOperation(SRResources.InvalidPropertyMapping, property.Name);
                         }

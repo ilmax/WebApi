@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Microsoft.AspNetCore.OData.Query.Expressions
 {
@@ -19,7 +18,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
         /// <returns>true if the arrays are equal; false otherwise.</returns>
         public static bool AreByteArraysEqual(byte[] left, byte[] right)
         {
-            if (Object.ReferenceEquals(left, right))
+            if (object.ReferenceEquals(left, right))
             {
                 return true;
             }

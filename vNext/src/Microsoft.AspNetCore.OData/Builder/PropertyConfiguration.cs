@@ -87,10 +87,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// Gets whether the property is restricted, i.e. not filterable, not sortable, not navigable,
         /// not expandable, not countable, or automatically expand.
         /// </summary>
-        public bool IsRestricted
-        {
-            get { return NotFilterable || NotSortable || NotNavigable || NotExpandable || NotCountable || AutoExpand; }
-        }
+        public bool IsRestricted => NotFilterable || NotSortable || NotNavigable || NotExpandable || NotCountable || AutoExpand;
 
         /// <summary>
         /// Gets or sets whether the property is not filterable. default is false.

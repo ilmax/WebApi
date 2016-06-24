@@ -21,7 +21,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
             // String.Substring(int) accepts startIndex==length
             return startIndex <= str.Length
                     ? str.Substring(startIndex)
-                    : String.Empty;
+                    : string.Empty;
         }
 
         public static string SubstringStartAndLength(string str, int startIndex, int length)
@@ -38,13 +38,13 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
             // String.Substring(int, int) accepts startIndex==length
             if (startIndex > strLength)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             length = Math.Min(length, strLength - startIndex);
             return length >= 0
                     ? str.Substring(startIndex, length)
-                    : String.Empty;
+                    : string.Empty;
         }
     }
 }

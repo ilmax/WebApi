@@ -18,8 +18,8 @@ namespace Microsoft.AspNetCore.OData.Formatter.Serialization
         private static readonly ConcurrentDictionary<Tuple<string, Type>, Func<object, object>> _propertyGetterCache =
             new ConcurrentDictionary<Tuple<string, Type>, Func<object, object>>();
 
-        private IEdmStructuredTypeReference _edmType;
-        private Type _type;
+        private readonly IEdmStructuredTypeReference _edmType;
+        private readonly Type _type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypedEdmStructuredObject"/> class.

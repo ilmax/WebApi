@@ -13,9 +13,9 @@ namespace Microsoft.AspNetCore.OData.Common
 {
     internal class PropertyHelper
     {
-        private static ConcurrentDictionary<Type, PropertyHelper[]> _reflectionCache = new ConcurrentDictionary<Type, PropertyHelper[]>();
+        private static readonly ConcurrentDictionary<Type, PropertyHelper[]> _reflectionCache = new ConcurrentDictionary<Type, PropertyHelper[]>();
 
-        private Func<object, object> _valueGetter;
+        private readonly Func<object, object> _valueGetter;
 
         /// <summary>
         /// Initializes a fast property helper. This constructor does not cache the helper.

@@ -74,13 +74,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the full name of this edm type.
         /// </summary>
-        public virtual string FullName
-        {
-            get
-            {
-                return Namespace + "." + Name;
-            }
-        }
+        public virtual string FullName => Namespace + "." + Name;
 
         /// <summary>
         /// Gets or sets the namespace of this EDM type.
@@ -127,18 +121,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets a value indicating whether this type is open or not.
         /// </summary>
-        public bool IsOpen
-        {
-            get { return _dynamicPropertyDictionary != null; }
-        }
+        public bool IsOpen => _dynamicPropertyDictionary != null;
 
         /// <summary>
         /// Gets the CLR property info of the dynamic property dictionary on this structural type.
         /// </summary>
-        public PropertyInfo DynamicPropertyDictionary
-        {
-            get { return _dynamicPropertyDictionary; }
-        }
+        public PropertyInfo DynamicPropertyDictionary => _dynamicPropertyDictionary;
 
         /// <summary>
         /// Gets or sets a value indicating whether this type is abstract.
@@ -148,35 +136,17 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets a value that represents whether the base type is explicitly configured or inferred.
         /// </summary>
-        public virtual bool BaseTypeConfigured
-        {
-            get
-            {
-                return _baseTypeConfigured;
-            }
-        }
+        public virtual bool BaseTypeConfigured => _baseTypeConfigured;
 
         /// <summary>
         /// Gets the declared properties on this edm type.
         /// </summary>
-        public IEnumerable<PropertyConfiguration> Properties
-        {
-            get
-            {
-                return ExplicitProperties.Values;
-            }
-        }
+        public IEnumerable<PropertyConfiguration> Properties => ExplicitProperties.Values;
 
         /// <summary>
         /// Gets the properties from the backing CLR type that are to be ignored on this edm type.
         /// </summary>
-        public ReadOnlyCollection<PropertyInfo> IgnoredProperties
-        {
-            get
-            {
-                return new ReadOnlyCollection<PropertyInfo>(RemovedProperties);
-            }
-        }
+        public ReadOnlyCollection<PropertyInfo> IgnoredProperties => new ReadOnlyCollection<PropertyInfo>(RemovedProperties);
 
         /// <summary>
         /// Gets or sets a value that is <c>true</c> if the type's name or namespace was set by the user; <c>false</c> if it was inferred through conventions.
@@ -202,13 +172,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the base type of this structural type.
         /// </summary>
-        protected internal virtual StructuralTypeConfiguration BaseTypeInternal
-        {
-            get
-            {
-                return _baseType;
-            }
-        }
+        protected internal virtual StructuralTypeConfiguration BaseTypeInternal => _baseType;
 
         internal virtual void AbstractImpl()
         {

@@ -16,9 +16,8 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public abstract class NavigationSourceConfiguration<TEntityType> where TEntityType : class
     {
-        private NavigationSourceConfiguration _configuration;
-        private EntityTypeConfiguration<TEntityType> _entityType;
-        private ODataModelBuilder _modelBuilder;
+        private readonly NavigationSourceConfiguration _configuration;
+        private readonly ODataModelBuilder _modelBuilder;
 
         internal NavigationSourceConfiguration(ODataModelBuilder modelBuilder, NavigationSourceConfiguration configuration)
         {
@@ -34,24 +33,15 @@ namespace Microsoft.AspNetCore.OData.Builder
 
             _configuration = configuration;
             _modelBuilder = modelBuilder;
-            _entityType = new EntityTypeConfiguration<TEntityType>(modelBuilder, _configuration.EntityType);
+            EntityType = new EntityTypeConfiguration<TEntityType>(modelBuilder, _configuration.EntityType);
         }
 
         /// <summary>
         /// Gets the entity type contained in this navigation source configuration.
         /// </summary>
-        public EntityTypeConfiguration<TEntityType> EntityType
-        {
-            get
-            {
-                return _entityType;
-            }
-        }
+        public EntityTypeConfiguration<TEntityType> EntityType { get; }
 
-        internal NavigationSourceConfiguration Configuration
-        {
-            get { return _configuration; }
-        }
+        internal NavigationSourceConfiguration Configuration => _configuration;
 
         /// <summary>
         /// Configures an one-to-many relationship from this entity type and binds the corresponding navigation property to
@@ -75,7 +65,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(entitySetName))
+            if (string.IsNullOrEmpty(entitySetName))
             {
                 throw Error.ArgumentNullOrEmpty("entitySetName");
             }
@@ -83,7 +73,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasMany(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasMany(navigationExpression),
                 _modelBuilder.EntitySet<TTargetType>(entitySetName)._configuration);
         }
 
@@ -107,12 +97,12 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(entitySetName))
+            if (string.IsNullOrEmpty(entitySetName))
             {
                 throw Error.ArgumentNullOrEmpty("entitySetName");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasMany(navigationExpression),
+            return Configuration.AddBinding(EntityType.HasMany(navigationExpression),
                 _modelBuilder.EntitySet<TTargetType>(entitySetName)._configuration);
         }
 
@@ -141,7 +131,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("targetEntitySet");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasMany(navigationExpression), targetEntitySet.Configuration);
+            return Configuration.AddBinding(EntityType.HasMany(navigationExpression), targetEntitySet.Configuration);
         }
 
         /// <summary>
@@ -175,7 +165,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasMany(navigationExpression), targetEntitySet.Configuration);
+            return Configuration.AddBinding(derivedEntityType.HasMany(navigationExpression), targetEntitySet.Configuration);
         }
 
         /// <summary>
@@ -198,12 +188,12 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(entitySetName))
+            if (string.IsNullOrEmpty(entitySetName))
             {
                 throw Error.ArgumentNullOrEmpty("entitySetName");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasRequired(navigationExpression),
+            return Configuration.AddBinding(EntityType.HasRequired(navigationExpression),
                 _modelBuilder.EntitySet<TTargetType>(entitySetName).Configuration);
         }
 
@@ -229,7 +219,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(entitySetName))
+            if (string.IsNullOrEmpty(entitySetName))
             {
                 throw Error.ArgumentNullOrEmpty("entitySetName");
             }
@@ -237,7 +227,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
                 _modelBuilder.EntitySet<TTargetType>(entitySetName).Configuration);
         }
 
@@ -266,7 +256,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("targetEntitySet");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasRequired(navigationExpression), targetEntitySet.Configuration);
+            return Configuration.AddBinding(EntityType.HasRequired(navigationExpression), targetEntitySet.Configuration);
         }
 
         /// <summary>
@@ -300,7 +290,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
                 targetEntitySet.Configuration);
         }
 
@@ -324,12 +314,12 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(entitySetName))
+            if (string.IsNullOrEmpty(entitySetName))
             {
                 throw Error.ArgumentNullOrEmpty("entitySetName");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasOptional(navigationExpression),
+            return Configuration.AddBinding(EntityType.HasOptional(navigationExpression),
                 _modelBuilder.EntitySet<TTargetType>(entitySetName).Configuration);
         }
 
@@ -355,7 +345,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(entitySetName))
+            if (string.IsNullOrEmpty(entitySetName))
             {
                 throw Error.ArgumentNullOrEmpty("entitySetName");
             }
@@ -363,7 +353,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasOptional(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasOptional(navigationExpression),
                 _modelBuilder.EntitySet<TTargetType>(entitySetName).Configuration);
         }
 
@@ -392,7 +382,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("targetEntitySet");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasOptional(navigationExpression), targetEntitySet.Configuration);
+            return Configuration.AddBinding(EntityType.HasOptional(navigationExpression), targetEntitySet.Configuration);
         }
 
         /// <summary>
@@ -426,7 +416,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasOptional(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasOptional(navigationExpression),
                 targetEntitySet.Configuration);
         }
 
@@ -450,12 +440,12 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(singletonName))
+            if (string.IsNullOrEmpty(singletonName))
             {
                 throw Error.ArgumentNullOrEmpty("singletonName");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasRequired(navigationExpression),
+            return Configuration.AddBinding(EntityType.HasRequired(navigationExpression),
                 _modelBuilder.Singleton<TTargetType>(singletonName).Configuration);
         }
 
@@ -481,7 +471,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("navigationExpression");
             }
 
-            if (String.IsNullOrEmpty(singletonName))
+            if (string.IsNullOrEmpty(singletonName))
             {
                 throw Error.ArgumentNullOrEmpty("singletonName");
             }
@@ -489,7 +479,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
                 _modelBuilder.Singleton<TTargetType>(singletonName).Configuration);
         }
 
@@ -518,7 +508,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("targetSingleton");
             }
 
-            return this.Configuration.AddBinding(EntityType.HasRequired(navigationExpression), targetSingleton.Configuration);
+            return Configuration.AddBinding(EntityType.HasRequired(navigationExpression), targetSingleton.Configuration);
         }
 
         /// <summary>
@@ -552,7 +542,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             EntityTypeConfiguration<TDerivedEntityType> derivedEntityType =
                 _modelBuilder.EntityType<TDerivedEntityType>().DerivesFrom<TEntityType>();
 
-            return this.Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
+            return Configuration.AddBinding(derivedEntityType.HasRequired(navigationExpression),
                 targetSingleton.Configuration);
         }
 

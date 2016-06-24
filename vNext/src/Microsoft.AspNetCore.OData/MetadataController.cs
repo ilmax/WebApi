@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.OData
 
         public MetadataController([NotNull]ODataProperties odataProperties)
         {
-           this._model = odataProperties.Model;
+            _model = odataProperties.Model;
         }
 
         // not work: public IEdmModel Get => this._model;
@@ -20,6 +20,5 @@ namespace Microsoft.AspNetCore.OData
         {
             return this._model;
         }
-
-}
+    }
 }

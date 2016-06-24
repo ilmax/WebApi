@@ -25,18 +25,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the type of this property.
         /// </summary>
-        public override PropertyKind Kind
-        {
-            get { return PropertyKind.Enum; }
-        }
+        public override PropertyKind Kind => PropertyKind.Enum;
 
         /// <summary>
         /// Gets the backing CLR type of this property type.
         /// </summary>
-        public override Type RelatedClrType
-        {
-            get { return PropertyInfo.PropertyType; }
-        }
+        public override Type RelatedClrType => PropertyInfo.PropertyType;
 
         /// <summary>
         /// Configures the property to be optional.

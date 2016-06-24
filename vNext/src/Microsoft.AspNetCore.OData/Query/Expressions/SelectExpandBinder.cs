@@ -10,32 +10,26 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Common;
-using Microsoft.AspNetCore.OData.Extensions;
-using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Query.Expressions;
 
 namespace Microsoft.AspNetCore.OData.Query.Expressions
 {
     using System;
 
     using Microsoft.AspNetCore.OData.Formatter;
-    using Mvc.Infrastructure;
 
     /// <summary>
     /// Applies the given <see cref="SelectExpandQueryOption"/> to the given <see cref="IQueryable"/>.
     /// </summary>
     internal class SelectExpandBinder
     {
-        private SelectExpandQueryOption _selectExpandQuery;
-        private ODataQueryContext _context;
-        private IEdmModel _model;
-        private ODataQuerySettings _settings;
+        private readonly SelectExpandQueryOption _selectExpandQuery;
+        private readonly ODataQueryContext _context;
+        private readonly IEdmModel _model;
+        private readonly ODataQuerySettings _settings;
         //private IassembliesProvider _assembliesProvider;
         private readonly IAssemblyProvider _assemblyProvider;
-        private string _modelID;
+        private readonly string _modelID;
 
         public SelectExpandBinder(ODataQuerySettings settings, IAssemblyProvider assembliesProvider, SelectExpandQueryOption selectExpandQuery)
         {

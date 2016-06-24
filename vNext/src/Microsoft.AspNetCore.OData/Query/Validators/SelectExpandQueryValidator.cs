@@ -75,7 +75,7 @@ namespace Microsoft.AspNetCore.OData.Query.Validators
                     expandItems.Any(expandItem =>
                         expandItem.LevelsOption != null &&
                         !expandItem.LevelsOption.IsMaxLevel &&
-                        (expandItem.LevelsOption.Level > Int32.MaxValue ||
+                        (expandItem.LevelsOption.Level > int.MaxValue ||
                         expandItem.LevelsOption.Level + currentDepth > maxDepth))))
                 {
                     throw new ODataException(

@@ -24,7 +24,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
 
             return builder.EnableLowerCamelCase(
@@ -45,7 +45,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
             if (builder == null)
             {
-                throw new ArgumentNullException("builder");
+                throw new ArgumentNullException(nameof(builder));
             }
             
             builder.OnModelCreating += new LowerCamelCaser(options).ApplyLowerCamelCase;

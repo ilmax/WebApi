@@ -2,7 +2,6 @@
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
 using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OData.Core.UriParser.Semantic;
 using Microsoft.OData.Edm;

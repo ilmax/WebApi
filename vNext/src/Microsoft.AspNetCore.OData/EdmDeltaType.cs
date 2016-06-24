@@ -11,45 +11,24 @@ namespace Microsoft.AspNetCore.OData
     /// </summary>
     internal class EdmDeltaType : IEdmType
     {
-        private IEdmEntityType _entityType;
-        private EdmDeltaEntityKind _deltaKind;
-
         internal EdmDeltaType(IEdmEntityType entityType, EdmDeltaEntityKind deltaKind)
         {
             if (entityType == null)
             {
                 throw Error.ArgumentNull("entityType");
             }
-            _entityType = entityType;
-            _deltaKind = deltaKind;
+            EntityType = entityType;
+            DeltaKind = deltaKind;
         }
 
         /// <inheritdoc />
-        public EdmTypeKind TypeKind
-        {
-            get 
-            {
-                return EdmTypeKind.Entity; 
-            }
-        }
+        public EdmTypeKind TypeKind => EdmTypeKind.Entity;
 
-        public IEdmEntityType EntityType
-        {
-            get
-            {
-                return _entityType;
-            }
-        }
+        public IEdmEntityType EntityType { get; }
 
         /// <summary>
         /// Returning DeltaKind of the object within DeltaFeed payload
         /// </summary>
-        public EdmDeltaEntityKind DeltaKind
-        {
-            get
-            {
-                return _deltaKind;
-            }
-        }
+        public EdmDeltaEntityKind DeltaKind { get; }
     }
 }

@@ -7,8 +7,6 @@ namespace Microsoft.AspNetCore.OData.Builder
 {
     using System;
 
-    using Microsoft.AspNetCore.OData.Builder;
-
     /// <summary>
     /// Represents the configuration for a complex property of a structural type (an entity type or a complex type).
     /// </summary>
@@ -25,16 +23,10 @@ namespace Microsoft.AspNetCore.OData.Builder
         }
 
         /// <inheritdoc />
-        public override PropertyKind Kind
-        {
-            get { return PropertyKind.Complex; }
-        }
+        public override PropertyKind Kind => PropertyKind.Complex;
 
         /// <inheritdoc />
-        public override Type RelatedClrType
-        {
-            get { return PropertyInfo.PropertyType; }
-        }
+        public override Type RelatedClrType => PropertyInfo.PropertyType;
 
         /// <summary>
         /// Marks the current complex property as optional.

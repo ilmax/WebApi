@@ -84,7 +84,7 @@ namespace Microsoft.AspNetCore.OData.Builder.Conventions.Attributes
             IEnumerable<string> dependentPropertyNames = foreignKeyAttribute.Name.Split(',').Select(p => p.Trim());
             foreach (string dependentPropertyName in dependentPropertyNames)
             {
-                if (String.IsNullOrWhiteSpace(dependentPropertyName))
+                if (string.IsNullOrWhiteSpace(dependentPropertyName))
                 {
                     continue;
                 }

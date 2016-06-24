@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.OData
     /// </summary>
     public class NullEdmComplexObject : IEdmComplexObject
     {
-        private IEdmComplexTypeReference _edmType;
+        private readonly IEdmComplexTypeReference _edmType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NullEdmComplexObject"/> class.

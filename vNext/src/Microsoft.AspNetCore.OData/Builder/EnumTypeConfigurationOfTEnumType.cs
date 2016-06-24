@@ -14,7 +14,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public class EnumTypeConfiguration<TEnumType>
     {
-        private EnumTypeConfiguration _configuration;
+        private readonly EnumTypeConfiguration _configuration;
 
         internal EnumTypeConfiguration(EnumTypeConfiguration configuration)
         {
@@ -26,21 +26,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the collection of EDM enum members that belong to this type.
         /// </summary>
-        public IEnumerable<EnumMemberConfiguration> Members
-        {
-            get { return _configuration.Members; }
-        }
+        public IEnumerable<EnumMemberConfiguration> Members => _configuration.Members;
 
         /// <summary>
         /// Gets the full name of this EDM type.
         /// </summary>
-        public string FullName
-        {
-            get
-            {
-                return _configuration.FullName;
-            }
-        }
+        public string FullName => _configuration.FullName;
 
         /// <summary>
         /// Gets or sets the namespace of this EDM type.

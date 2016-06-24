@@ -13,13 +13,7 @@ namespace Microsoft.AspNetCore.OData.Routing
     public class RefPathSegment : ODataPathSegment
     {
         /// <inheritdoc/>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Ref;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Ref;
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)

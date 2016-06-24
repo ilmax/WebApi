@@ -2,7 +2,6 @@
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
 using Microsoft.AspNetCore.OData.Extensions;
-using Microsoft.AspNetCore.OData.Query.Expressions;
 using Microsoft.OData.Core.UriParser;
 using Microsoft.OData.Edm;
 using System;

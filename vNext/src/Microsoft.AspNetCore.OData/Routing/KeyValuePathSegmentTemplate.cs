@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the dictionary representing the mappings from the key names in the segment to the key names in route data.
         /// </summary>
-        public IDictionary<string, string> ParameterMappings { get; private set; }
+        public IDictionary<string, string> ParameterMappings { get; }
 
         /// <inheritdoc />
         public override bool TryMatch(ODataPathSegment pathSegment, IDictionary<string, object> values)
@@ -79,7 +79,7 @@ namespace Microsoft.AspNetCore.OData.Routing
                 {
                     string[] enumParts = value.Split(new[] { '\'' }, StringSplitOptions.None);
 
-                    if (enumParts.Length == 3 && String.IsNullOrEmpty(enumParts[2]))
+                    if (enumParts.Length == 3 && string.IsNullOrEmpty(enumParts[2]))
                     {
                         // Remove the type name if the enum value is a fully qualified literal.
                         value = enumParts[1];
@@ -108,14 +108,14 @@ namespace Microsoft.AspNetCore.OData.Routing
                 string parameterNameInRouteData = parameter.Value;
                 parameterNameInRouteData = parameterNameInRouteData.Trim();
 
-                if (String.IsNullOrEmpty(parameterNameInRouteData))
+                if (string.IsNullOrEmpty(parameterNameInRouteData))
                 {
                     parameterNameInRouteData = parameterName;
                 }
                 else if (IsRouteParameter(parameterNameInRouteData))
                 {
                     parameterNameInRouteData = parameterNameInRouteData.Substring(1, parameterNameInRouteData.Length - 2);
-                    if (String.IsNullOrEmpty(parameterNameInRouteData))
+                    if (string.IsNullOrEmpty(parameterNameInRouteData))
                     {
                         throw new ODataException(
                             Error.Format(SRResources.EmptyParameterAlias, parameter.Value, segment));

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.OData.Common;
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +8,7 @@ namespace Microsoft.AspNetCore.OData.Extensions
     public static class HttpRequestExtensions
     {
         /// <summary>
-        /// Gets the <see cref="HttpRequestProperties"/> instance containing OData methods and properties
+        /// Gets the <see cref="ODataProperties"/> instance containing OData methods and properties
         /// for given <see cref="HttpRequest"/>.
         /// </summary>
         /// <param name="request">The request of interest.</param>

@@ -11,7 +11,6 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
 
     using Microsoft.AspNetCore.OData;
     using Microsoft.AspNetCore.OData.Common;
-    using System.Reflection;
 
     /// <summary>
     /// A container of property names and property values.
@@ -170,7 +169,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
                 if (Name != null && (includeAutoSelected || !AutoSelected))
                 {
                     string mappedName = propertyMapper.MapProperty(Name);
-                    if (String.IsNullOrEmpty(mappedName))
+                    if (string.IsNullOrEmpty(mappedName))
                     {
                         throw Error.InvalidOperation(SRResources.InvalidPropertyMapping, Name);
                     }

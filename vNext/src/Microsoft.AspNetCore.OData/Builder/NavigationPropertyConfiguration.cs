@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.OData.Edm;
 using Microsoft.AspNetCore.OData.Common;
-using Microsoft.AspNetCore.OData.Extensions;
 
 namespace Microsoft.AspNetCore.OData.Builder
 {
@@ -58,13 +57,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the declaring entity type.
         /// </summary>
-        public EntityTypeConfiguration DeclaringEntityType
-        {
-            get
-            {
-                return DeclaringType as EntityTypeConfiguration;
-            }
-        }
+        public EntityTypeConfiguration DeclaringEntityType => DeclaringType as EntityTypeConfiguration;
 
         /// <summary>
         /// Gets the <see cref="EdmMultiplicity"/> of this navigation property.
@@ -79,18 +72,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the backing CLR type of this property type.
         /// </summary>
-        public override Type RelatedClrType
-        {
-            get { return _relatedType; }
-        }
+        public override Type RelatedClrType => _relatedType;
 
         /// <summary>
         /// Gets the <see cref="PropertyKind"/> of this property.
         /// </summary>
-        public override PropertyKind Kind
-        {
-            get { return PropertyKind.Navigation; }
-        }
+        public override PropertyKind Kind => PropertyKind.Navigation;
 
         /// <summary>
         /// Gets or sets the delete action for this navigation property.
@@ -100,18 +87,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the foreign keys in the referential constraint of this navigation property.
         /// </summary>
-        public IEnumerable<PropertyInfo> DependentProperties
-        {
-            get { return _referentialConstraint.Keys; }
-        }
+        public IEnumerable<PropertyInfo> DependentProperties => _referentialConstraint.Keys;
 
         /// <summary>
         /// Gets the target keys in the referential constraint of this navigation property.
         /// </summary>
-        public IEnumerable<PropertyInfo> PrincipalProperties
-        {
-            get { return _referentialConstraint.Values; }
-        }
+        public IEnumerable<PropertyInfo> PrincipalProperties => _referentialConstraint.Values;
 
         /// <summary>
         /// Marks the navigation property as optional.

@@ -11,14 +11,14 @@ namespace Microsoft.AspNetCore.OData
 
         public ODataServiceBuilder([NotNull]IServiceCollection serviceCollection)
         {
-            this._serviceCollection = serviceCollection;
-            this._provider = new ODataContextProvider();
-            _serviceCollection.AddSingleton(_=>this._provider);
+            _serviceCollection = serviceCollection;
+            _provider = new ODataContextProvider();
+            _serviceCollection.AddSingleton(_=>_provider);
         }
 
         public void Register<T>(string prefix) where T : class
         {
-            this._provider.Register<T>(prefix);
+            _provider.Register<T>(prefix);
         }
 
         public IServiceCollection Service => _serviceCollection;

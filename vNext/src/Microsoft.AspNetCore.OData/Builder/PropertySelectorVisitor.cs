@@ -6,14 +6,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Common;
 
 namespace Microsoft.AspNetCore.OData.Builder
 {
     internal class PropertySelectorVisitor : ExpressionVisitor
     {
-        private List<PropertyInfo> _properties = new List<PropertyInfo>();
+        private readonly List<PropertyInfo> _properties = new List<PropertyInfo>();
 
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Class is internal, virtual call okay")]
         internal PropertySelectorVisitor(Expression exp)
@@ -21,21 +20,9 @@ namespace Microsoft.AspNetCore.OData.Builder
             Visit(exp);
         }
 
-        public PropertyInfo Property
-        {
-            get
-            {
-                return _properties.SingleOrDefault();
-            }
-        }
+        public PropertyInfo Property => _properties.SingleOrDefault();
 
-        public ICollection<PropertyInfo> Properties
-        {
-            get
-            {
-                return _properties;
-            }
-        }
+        public ICollection<PropertyInfo> Properties => _properties;
 
         protected override Expression VisitMember(MemberExpression node)
         {

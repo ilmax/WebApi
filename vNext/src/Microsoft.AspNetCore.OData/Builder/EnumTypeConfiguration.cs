@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         private const string DefaultNamespace = "Default";
         private string _namespace;
         private string _name;
-        private NullableEnumTypeConfiguration nullableEnumTypeConfiguration = null;
+        private NullableEnumTypeConfiguration _nullableEnumTypeConfiguration = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumTypeConfiguration"/> class.
@@ -56,13 +56,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the <see cref="EdmTypeKind"/> of this EDM type.
         /// </summary>
-        public EdmTypeKind Kind
-        {
-            get
-            {
-                return EdmTypeKind.Enum;
-            }
-        }
+        public EdmTypeKind Kind => EdmTypeKind.Enum;
 
         /// <summary>
         /// Gets the <see cref="IsFlags"/> of this enum type. 
@@ -84,13 +78,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the full name of this EDM type.
         /// </summary>
-        public string FullName
-        {
-            get
-            {
-                return Namespace + "." + Name;
-            }
-        }
+        public string FullName => Namespace + "." + Name;
 
         /// <summary>
         /// Gets or sets the namespace of this EDM type.
@@ -137,24 +125,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets all possible members(defined values) of this enum type, which will be added to the EDM model as edm:Member elements.
         /// </summary>
-        public IEnumerable<EnumMemberConfiguration> Members
-        {
-            get
-            {
-                return ExplicitMembers.Values;
-            }
-        }
+        public IEnumerable<EnumMemberConfiguration> Members => ExplicitMembers.Values;
 
         /// <summary>
         /// Gets the members from the backing CLR type that are to be ignored on this enum type.
         /// </summary>
-        public ReadOnlyCollection<Enum> IgnoredMembers
-        {
-            get
-            {
-                return new ReadOnlyCollection<Enum>(RemovedMembers);
-            }
-        }
+        public ReadOnlyCollection<Enum> IgnoredMembers => new ReadOnlyCollection<Enum>(RemovedMembers);
 
         /// <summary>
         /// Gets or sets a value that is <c>true</c> if the type's name or namespace was set by the user; 
@@ -244,12 +220,12 @@ namespace Microsoft.AspNetCore.OData.Builder
 
         internal NullableEnumTypeConfiguration GetNullableEnumTypeConfiguration()
         {
-            if (nullableEnumTypeConfiguration == null)
+            if (_nullableEnumTypeConfiguration == null)
             {
-                nullableEnumTypeConfiguration = new NullableEnumTypeConfiguration(this);
+                _nullableEnumTypeConfiguration = new NullableEnumTypeConfiguration(this);
             }
 
-            return nullableEnumTypeConfiguration;
+            return _nullableEnumTypeConfiguration;
         }
     }
 }

@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.OData.Common;
 using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Formatter.Serialization;
 using Microsoft.AspNetCore.OData.Routing;
-using Microsoft.Extensions.Internal;
 using Microsoft.OData.Core;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
@@ -220,7 +219,7 @@ namespace Microsoft.AspNetCore.OData.Formatter
                         payloadKind = GetClrObjectResponsePayloadKind(type, model, request);
                     }
 
-                    return payloadKind == null ? false : _payloadKinds.Contains(payloadKind.Value);
+                    return payloadKind != null && _payloadKinds.Contains(payloadKind.Value);
                 }
             }
 

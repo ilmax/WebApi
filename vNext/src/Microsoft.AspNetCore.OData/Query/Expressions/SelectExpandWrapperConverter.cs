@@ -47,8 +47,8 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
 
         private class JsonPropertyNameMapper : IPropertyMapper
         {
-            private IEdmModel _model;
-            private IEdmStructuredType _type;
+            private readonly IEdmModel _model;
+            private readonly IEdmStructuredType _type;
 
             public JsonPropertyNameMapper(IEdmModel model, IEdmStructuredType type)
             {
@@ -61,7 +61,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
                 IEdmProperty property = _type.Properties().Single(s => s.Name == propertyName);
                 PropertyInfo info = GetPropertyInfo(property);
                 JsonPropertyAttribute jsonProperty = GetJsonProperty(info);
-                if (jsonProperty != null && !String.IsNullOrWhiteSpace(jsonProperty.PropertyName))
+                if (jsonProperty != null && !string.IsNullOrWhiteSpace(jsonProperty.PropertyName))
                 {
                     return jsonProperty.PropertyName;
                 }

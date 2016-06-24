@@ -70,8 +70,6 @@ namespace Microsoft.AspNetCore.OData
 
         public virtual object ApplyQueryOptions(object value, ODataQueryOptions options, ActionDescriptor descriptor)
         {
-
-
             var enumerable = value as IEnumerable;
             if (enumerable == null)
             {

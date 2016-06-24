@@ -100,14 +100,14 @@ namespace Microsoft.AspNetCore.OData.Builder.Conventions
                                          dependentProperty.PropertyInfo.PropertyType;
                     if (dependentType == principalKey.PropertyInfo.PropertyType)
                     {
-                        if (String.Equals(dependentProperty.Name, principalEntityType.Name + principalKey.Name,
+                        if (string.Equals(dependentProperty.Name, principalEntityType.Name + principalKey.Name,
                             StringComparison.Ordinal))
                         {
                             // Customer (Id)  <--> Order (CustomerId)
                             typeNameForeignKeys.Add(dependentProperty, principalKey);
                         }
-                        else if (String.Equals(dependentProperty.Name, principalKey.Name, StringComparison.Ordinal) &&
-                            String.Equals(principalKey.Name, principalEntityType.Name + "Id", StringComparison.OrdinalIgnoreCase))
+                        else if (string.Equals(dependentProperty.Name, principalKey.Name, StringComparison.Ordinal) &&
+                            string.Equals(principalKey.Name, principalEntityType.Name + "Id", StringComparison.OrdinalIgnoreCase))
                         {
                             // Customer (CustomerId)  <--> Order (CustomerId)
                             typeNameForeignKeys.Add(dependentProperty, principalKey);

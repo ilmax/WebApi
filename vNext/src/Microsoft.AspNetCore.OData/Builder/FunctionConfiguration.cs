@@ -28,10 +28,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         }
 
         /// <inheritdoc />
-        public override ProcedureKind Kind
-        {
-            get { return ProcedureKind.Function; }
-        }
+        public override ProcedureKind Kind => ProcedureKind.Function;
 
         /// <inheritdoc />
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Copies existing spelling used in EdmLib.")]
@@ -42,10 +39,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         }
 
         /// <inheritdoc />
-        public override bool IsSideEffecting
-        {
-            get { return false; }
-        }
+        public override bool IsSideEffecting => false;
 
         /// <summary>
         /// Gets/Sets a value indicating whether the function is supported in $filter.
@@ -70,7 +64,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
             if (functionLinkFactory == null)
             {
-                throw new ArgumentNullException("functionLinkFactory");
+                throw new ArgumentNullException(nameof(functionLinkFactory));
             }
 
             if (!IsBindable || BindingParameter.TypeConfiguration.Kind != EdmTypeKind.Entity)
@@ -156,7 +150,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
             if (String.IsNullOrEmpty(entitySetPath))
             {
-                throw new ArgumentNullException("entitySetPath");
+                throw new ArgumentNullException(nameof(entitySetPath));
                 }
             ReturnsEntityViaEntitySetPathImplementation<TEntityType>(entitySetPath.Split('/'));
             return this;
@@ -184,7 +178,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
             if (String.IsNullOrEmpty(entitySetPath))
             {
-                throw new ArgumentNullException("entitySetPath");
+                throw new ArgumentNullException(nameof(entitySetPath));
             }
             ReturnsCollectionViaEntitySetPathImplementation<TElementEntityType>(entitySetPath.Split('/'));
             return this;

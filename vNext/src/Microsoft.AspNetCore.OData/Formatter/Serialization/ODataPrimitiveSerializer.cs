@@ -3,7 +3,6 @@
 
 using System;
 using System.Diagnostics.Contracts;
-using System.Reflection;
 using System.Xml.Linq;
 using Microsoft.OData.Core;
 using Microsoft.OData.Edm;

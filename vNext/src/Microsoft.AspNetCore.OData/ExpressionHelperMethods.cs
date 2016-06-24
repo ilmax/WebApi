@@ -43,115 +43,49 @@ namespace Microsoft.AspNetCore.OData
 
         private static MethodInfo _queryableAsQueryableMethod = GenericMethodOf(_ => Queryable.AsQueryable<int>(default(IEnumerable<int>)));
 
-        public static MethodInfo QueryableOrderByGeneric
-        {
-            get { return _orderByMethod; }
-        }
+        public static MethodInfo QueryableOrderByGeneric => _orderByMethod;
 
-        public static MethodInfo EnumerableOrderByGeneric
-        {
-            get { return _enumerableOrderByMethod; }
-        }
+        public static MethodInfo EnumerableOrderByGeneric => _enumerableOrderByMethod;
 
-        public static MethodInfo QueryableOrderByDescendingGeneric
-        {
-            get { return _orderByDescendingMethod; }
-        }
+        public static MethodInfo QueryableOrderByDescendingGeneric => _orderByDescendingMethod;
 
-        public static MethodInfo QueryableThenByGeneric
-        {
-            get { return _thenByMethod; }
-        }
+        public static MethodInfo QueryableThenByGeneric => _thenByMethod;
 
-        public static MethodInfo EnumerableThenByGeneric
-        {
-            get { return _enumerableThenByMethod; }
-        }
+        public static MethodInfo EnumerableThenByGeneric => _enumerableThenByMethod;
 
-        public static MethodInfo QueryableThenByDescendingGeneric
-        {
-            get { return _thenByDescendingMethod; }
-        }
+        public static MethodInfo QueryableThenByDescendingGeneric => _thenByDescendingMethod;
 
-        public static MethodInfo QueryableCountGeneric
-        {
-            get { return _countMethod; }
-        }
+        public static MethodInfo QueryableCountGeneric => _countMethod;
 
-        public static MethodInfo QueryableTakeGeneric
-        {
-            get { return _queryableTakeMethod; }
-        }
+        public static MethodInfo QueryableTakeGeneric => _queryableTakeMethod;
 
-        public static MethodInfo EnumerableTakeGeneric
-        {
-            get { return _enumerableTakeMethod; }
-        }
+        public static MethodInfo EnumerableTakeGeneric => _enumerableTakeMethod;
 
-        public static MethodInfo QueryableSkipGeneric
-        {
-            get { return _skipMethod; }
-        }
+        public static MethodInfo QueryableSkipGeneric => _skipMethod;
 
-        public static MethodInfo QueryableWhereGeneric
-        {
-            get { return _whereMethod; }
-        }
+        public static MethodInfo QueryableWhereGeneric => _whereMethod;
 
-        public static MethodInfo QueryableSelectGeneric
-        {
-            get { return _queryableSelectMethod; }
-        }
+        public static MethodInfo QueryableSelectGeneric => _queryableSelectMethod;
 
-        public static MethodInfo EnumerableSelectGeneric
-        {
-            get { return _enumerableSelectMethod; }
-        }
+        public static MethodInfo EnumerableSelectGeneric => _enumerableSelectMethod;
 
-        public static MethodInfo QueryableEmptyAnyGeneric
-        {
-            get { return _queryableEmptyAnyMethod; }
-        }
+        public static MethodInfo QueryableEmptyAnyGeneric => _queryableEmptyAnyMethod;
 
-        public static MethodInfo QueryableNonEmptyAnyGeneric
-        {
-            get { return _queryableNonEmptyAnyMethod; }
-        }
+        public static MethodInfo QueryableNonEmptyAnyGeneric => _queryableNonEmptyAnyMethod;
 
-        public static MethodInfo QueryableAllGeneric
-        {
-            get { return _queryableAllMethod; }
-        }
+        public static MethodInfo QueryableAllGeneric => _queryableAllMethod;
 
-        public static MethodInfo EnumerableEmptyAnyGeneric
-        {
-            get { return _enumerableEmptyAnyMethod; }
-        }
+        public static MethodInfo EnumerableEmptyAnyGeneric => _enumerableEmptyAnyMethod;
 
-        public static MethodInfo EnumerableNonEmptyAnyGeneric
-        {
-            get { return _enumerableNonEmptyAnyMethod; }
-        }
+        public static MethodInfo EnumerableNonEmptyAnyGeneric => _enumerableNonEmptyAnyMethod;
 
-        public static MethodInfo EnumerableAllGeneric
-        {
-            get { return _enumerableAllMethod; }
-        }
+        public static MethodInfo EnumerableAllGeneric => _enumerableAllMethod;
 
-        public static MethodInfo EnumerableOfType
-        {
-            get { return _enumerableOfTypeMethod; }
-        }
+        public static MethodInfo EnumerableOfType => _enumerableOfTypeMethod;
 
-        public static MethodInfo QueryableOfType
-        {
-            get { return _queryableOfTypeMethod; }
-        }
+        public static MethodInfo QueryableOfType => _queryableOfTypeMethod;
 
-        public static MethodInfo QueryableAsQueryable
-        {
-            get { return _queryableAsQueryableMethod; }
-        }
+        public static MethodInfo QueryableAsQueryable => _queryableAsQueryableMethod;
 
         private static MethodInfo GenericMethodOf<TReturn>(Expression<Func<object, TReturn>> expression)
         {

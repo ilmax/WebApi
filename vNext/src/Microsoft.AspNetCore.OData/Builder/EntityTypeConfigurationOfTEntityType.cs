@@ -17,9 +17,8 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// <typeparam name="TEntityType">The backing CLR type for this <see cref="IEdmEntityType"/>.</typeparam>
     public class EntityTypeConfiguration<TEntityType> : StructuralTypeConfiguration<TEntityType> where TEntityType : class
     {
-        private EntityTypeConfiguration _configuration;
-        private EntityCollectionConfiguration<TEntityType> _collection;
-        private ODataModelBuilder _modelBuilder;
+        private readonly EntityTypeConfiguration _configuration;
+        private readonly ODataModelBuilder _modelBuilder;
 
         /// <summary>
         /// Initializes a new instance of <see cref="EntityTypeConfiguration"/>.
@@ -38,36 +37,24 @@ namespace Microsoft.AspNetCore.OData.Builder
 
             _modelBuilder = modelBuilder;
             _configuration = configuration;
-            _collection = new EntityCollectionConfiguration<TEntityType>(configuration);
+            Collection = new EntityCollectionConfiguration<TEntityType>(configuration);
         }
 
         /// <summary>
         /// Gets the base type of this entity type.
         /// </summary>
-        public EntityTypeConfiguration BaseType
-        {
-            get
-            {
-                return _configuration.BaseType;
-            }
-        }
+        public EntityTypeConfiguration BaseType => _configuration.BaseType;
 
         /// <summary>
         /// Gets the collection of <see cref="NavigationPropertyConfiguration"/> of this entity type.
         /// </summary>
-        public IEnumerable<NavigationPropertyConfiguration> NavigationProperties
-        {
-            get { return _configuration.NavigationProperties; }
-        }
+        public IEnumerable<NavigationPropertyConfiguration> NavigationProperties => _configuration.NavigationProperties;
 
         /// <summary>
         /// Used to access a Collection of Entities through which you can configure
         /// actions and functions that are bindable to EntityCollections.
         /// </summary>
-        public EntityCollectionConfiguration<TEntityType> Collection
-        {
-            get { return _collection; }
-        }
+        public EntityCollectionConfiguration<TEntityType> Collection { get; }
 
         /// <summary>
         /// Marks this entity type as abstract.
@@ -298,7 +285,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <returns>The FunctionConfiguration to allow further configuration of the new Function.</returns>
         public FunctionConfiguration Function(string name)
         {
-            Contract.Assert(_configuration != null && _configuration.ModelBuilder != null);
+            Contract.Assert(_configuration?.ModelBuilder != null);
 
             FunctionConfiguration function = _configuration.ModelBuilder.Function(name);
             function.SetBindingParameter(BindingParameterConfiguration.DefaultBindingParameterName, _configuration);

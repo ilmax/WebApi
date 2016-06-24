@@ -15,10 +15,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         private readonly IDictionary<PropertyInfo, PropertyInfo> _properties =
             new Dictionary<PropertyInfo, PropertyInfo>();
 
-        public IDictionary<PropertyInfo, PropertyInfo> Properties
-        {
-            get { return _properties; }
-        }
+        public IDictionary<PropertyInfo, PropertyInfo> Properties => _properties;
 
         public static IDictionary<PropertyInfo, PropertyInfo> GetSelectedProperty(Expression exp)
         {

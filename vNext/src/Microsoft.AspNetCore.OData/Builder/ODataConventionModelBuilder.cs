@@ -9,14 +9,11 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.OData.Builder.Conventions;
 using Microsoft.AspNetCore.OData.Builder.Conventions.Attributes;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Common;
-using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.OData.Edm;
 
 namespace Microsoft.AspNetCore.OData.Builder
 {
-    using Mvc.Infrastructure;
     using Microsoft.AspNetCore.OData.Formatter;
 
     /// <summary>
@@ -25,7 +22,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Most of the referenced types are helper types needed for operation.")]
     public class ODataConventionModelBuilder : ODataModelBuilder
     {
-        private static readonly List<IConvention> _conventions = new List<IConvention>
+        private static readonly List<IConvention> s_conventions = new List<IConvention>
         {
             // type and property conventions (ordering is important here).
             new AbstractTypeDiscoveryConvention(),
@@ -272,10 +269,7 @@ namespace Microsoft.AspNetCore.OData.Builder
                 ApplyProcedureConventions(procedure);
             }
 
-            if (OnModelCreating != null)
-            {
-                OnModelCreating(this);
-            }
+            OnModelCreating?.Invoke(this);
 
             return base.GetEdmModel();
         }
@@ -941,8 +935,8 @@ namespace Microsoft.AspNetCore.OData.Builder
             {
                 throw Error.InvalidOperation(SRResources.CannotInferEdmType,
                     propertyType.FullName,
-                    String.Join(",", foundMappedEntityType.Select(e => e.ClrType.FullName)),
-                    String.Join(",", foundMappedComplexType.Select(e => e.ClrType.FullName)));
+                    string.Join(",", foundMappedEntityType.Select(e => e.ClrType.FullName)),
+                    string.Join(",", foundMappedComplexType.Select(e => e.ClrType.FullName)));
             }
         }
 
@@ -1033,7 +1027,7 @@ namespace Microsoft.AspNetCore.OData.Builder
 
         private void ApplyTypeAndPropertyConventions(StructuralTypeConfiguration edmTypeConfiguration)
         {
-            foreach (IConvention convention in _conventions)
+            foreach (IConvention convention in s_conventions)
             {
                 IEdmTypeConvention typeConvention = convention as IEdmTypeConvention;
                 if (typeConvention != null)
@@ -1055,7 +1049,7 @@ namespace Microsoft.AspNetCore.OData.Builder
             {
                 _configuredNavigationSources.Add(navigationSourceConfiguration);
 
-                foreach (INavigationSourceConvention convention in _conventions.OfType<INavigationSourceConvention>())
+                foreach (INavigationSourceConvention convention in s_conventions.OfType<INavigationSourceConvention>())
                 {
                     if (convention != null)
                     {
@@ -1067,7 +1061,7 @@ namespace Microsoft.AspNetCore.OData.Builder
 
         private void ApplyProcedureConventions(ProcedureConfiguration procedure)
         {
-            foreach (IProcedureConvention convention in _conventions.OfType<IProcedureConvention>())
+            foreach (IProcedureConvention convention in s_conventions.OfType<IProcedureConvention>())
             {
                 convention.Apply(procedure, this);
             }
@@ -1099,7 +1093,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         private void ReapplyPropertyConvention(PropertyConfiguration property,
             StructuralTypeConfiguration edmTypeConfiguration)
         {
-            foreach (IEdmPropertyConvention propertyConvention in _conventions.OfType<IEdmPropertyConvention>())
+            foreach (IEdmPropertyConvention propertyConvention in s_conventions.OfType<IEdmPropertyConvention>())
             {
                   propertyConvention.Apply(property, edmTypeConfiguration, this);
             }

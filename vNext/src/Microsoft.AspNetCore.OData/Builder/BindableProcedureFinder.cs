@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     internal class BindableProcedureFinder
     {
-        private Dictionary<IEdmEntityType, List<IEdmOperation>> _map = new Dictionary<IEdmEntityType, List<IEdmOperation>>();
+        private readonly Dictionary<IEdmEntityType, List<IEdmOperation>> _map = new Dictionary<IEdmEntityType, List<IEdmOperation>>();
 
         /// <summary>
         /// Constructs a concurrent cache for looking up bindable procedures for any EntityType in the provided model.

@@ -14,9 +14,6 @@ namespace Microsoft.AspNetCore.OData
     [NonValidatingParameterBinding]
     public class EdmDeltaLink : EdmEntityObject, IEdmDeltaLink
     {
-        private Uri _source;
-        private Uri _target;
-        private string _relationship;
         private EdmDeltaType _edmType;
 
         /// <summary>
@@ -49,43 +46,13 @@ namespace Microsoft.AspNetCore.OData
         }
 
         /// <inheritdoc />
-        public Uri Source
-        {
-            get
-            {
-                return _source;
-            }
-            set
-            {
-                _source = value;
-            }
-        }
+        public Uri Source { get; set; }
 
         /// <inheritdoc />
-        public Uri Target
-        {
-            get
-            {
-                return _target;
-            }
-            set
-            {
-                _target = value;
-            }
-        }
+        public Uri Target { get; set; }
 
         /// <inheritdoc />
-        public string Relationship
-        {
-            get
-            {
-                return _relationship;
-            }
-            set
-            {
-                _relationship = value;
-            }
-        }
+        public string Relationship { get; set; }
 
         /// <inheritdoc />
         public EdmDeltaEntityKind DeltaKind

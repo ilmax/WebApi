@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Microsoft.AspNetCore.OData.Common;
-using System.Reflection;
 
 namespace Microsoft.AspNetCore.OData.Builder.Conventions.Attributes
 {

@@ -3,7 +3,6 @@
 
 using System.Linq;
 using System.Reflection;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Common;
 
 namespace Microsoft.AspNetCore.OData.Builder.Conventions

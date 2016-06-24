@@ -16,8 +16,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public class CollectionTypeConfiguration : IEdmTypeConfiguration
     {
-        private IEdmTypeConfiguration _elementType;
-        private Type _clrType;
+        private readonly IEdmTypeConfiguration _elementType;
 
         /// <summary>
         /// Constructs a collection that contains elements of the specified ElementType
@@ -36,67 +35,42 @@ namespace Microsoft.AspNetCore.OData.Builder
                 throw Error.ArgumentNull("clrType");
             }
             _elementType = elementType;
-            _clrType = clrType;
+            ClrType = clrType;
         }
 
         /// <summary>
         /// Gets the <see cref="IEdmTypeConfiguration" /> of elements in this collection.
         /// </summary>
-        public IEdmTypeConfiguration ElementType
-        {
-            get { return _elementType; }
-        }
+        public IEdmTypeConfiguration ElementType => _elementType;
 
         /// <summary>
         /// Gets the CLR type associated with this collection type.
         /// </summary>
-        public Type ClrType
-        {
-            get { return _clrType; }
-        }
+        public Type ClrType { get; }
 
         /// <summary>
         /// Gets the fullname (including namespace) of this collection type.
         /// </summary>
-        public string FullName
-        {
-            get
-            {
-                // There is no need to include the Namespace when it comes from the Edm Namespace.
-                return Name;
-            }
-        }
+        public string FullName => Name;
 
         /// <summary>
         /// Gets the namespace of this collection type.
         /// </summary>
-        public string Namespace
-        {
-            get { return "Edm"; }
-        }
+        public string Namespace => "Edm";
 
         /// <summary>
         /// Gets the name of this collection type.
         /// </summary>
-        public string Name
-        {
-            get { return String.Format(CultureInfo.InvariantCulture, "Collection({0})", ElementType.FullName); }
-        }
+        public string Name => string.Format(CultureInfo.InvariantCulture, "Collection({0})", ElementType.FullName);
 
         /// <summary>
         /// Gets the kind of the <see cref="IEdmType" />. In this case, it is <see cref="EdmTypeKind.Collection" />.
         /// </summary>
-        public EdmTypeKind Kind
-        {
-            get { return EdmTypeKind.Collection; }
-        }
+        public EdmTypeKind Kind => EdmTypeKind.Collection;
 
         /// <summary>
         /// Gets the <see cref="ODataModelBuilder"/> used to create this configuration.
         /// </summary>
-        public ODataModelBuilder ModelBuilder
-        {
-            get { return _elementType.ModelBuilder; }
-        }
+        public ODataModelBuilder ModelBuilder => _elementType.ModelBuilder;
     }
 }

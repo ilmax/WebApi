@@ -3,13 +3,11 @@
 
 namespace Microsoft.AspNetCore.OData.Query
 {
-    using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.OData.Common;
     using Microsoft.AspNetCore.OData.Extensions;
     using Microsoft.AspNetCore.OData.Query.Expressions;
@@ -17,7 +15,6 @@ namespace Microsoft.AspNetCore.OData.Query
     using Microsoft.OData.Core.UriParser;
     using Microsoft.OData.Core.UriParser.Semantic;
     using Microsoft.OData.Edm;
-    using Mvc.Infrastructure;
 
     /// <summary>
     /// Represents the OData $select and $expand query options.
@@ -27,7 +24,7 @@ namespace Microsoft.AspNetCore.OData.Query
         private readonly IAssemblyProvider _assemblyProvider;
         //private static readonly IAssembliesResolver _defaultAssembliesResolver = new DefaultAssembliesResolver();
         private SelectExpandClause _selectExpandClause;
-        private ODataQueryOptionParser _queryOptionParser;
+        private readonly ODataQueryOptionParser _queryOptionParser;
         private int _levelsMaxLiteralExpansionDepth = ODataValidationSettings.DefaultMaxExpansionDepth;
 
         /// <summary>
@@ -45,7 +42,7 @@ namespace Microsoft.AspNetCore.OData.Query
                 throw Error.ArgumentNull("context");
             }
 
-            if (String.IsNullOrEmpty(select) && String.IsNullOrEmpty(expand))
+            if (string.IsNullOrEmpty(select) && string.IsNullOrEmpty(expand))
             {
                 throw Error.Argument(SRResources.SelectExpandEmptyOrNull);
             }
@@ -88,7 +85,7 @@ namespace Microsoft.AspNetCore.OData.Query
                 throw Error.ArgumentNull("context");
             }
 
-            if (String.IsNullOrEmpty(select) && String.IsNullOrEmpty(expand))
+            if (string.IsNullOrEmpty(select) && string.IsNullOrEmpty(expand))
             {
                 throw Error.Argument(SRResources.SelectExpandEmptyOrNull);
             }

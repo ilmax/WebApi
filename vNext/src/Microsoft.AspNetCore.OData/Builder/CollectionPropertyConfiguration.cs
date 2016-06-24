@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Common;
-using Microsoft.AspNetCore.OData.Extensions;
 using System.Reflection;
 
 namespace Microsoft.AspNetCore.OData.Builder
@@ -15,7 +13,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public class CollectionPropertyConfiguration : StructuralPropertyConfiguration
     {
-        private Type _elementType;
+        private readonly Type _elementType;
 
         /// <summary>
         /// Constructs a CollectionPropertyConfiguration using the <paramref name="property">property</paramref> provided.
@@ -30,24 +28,15 @@ namespace Microsoft.AspNetCore.OData.Builder
         }
 
         /// <inheritdoc />
-        public override PropertyKind Kind
-        {
-            get { return PropertyKind.Collection; }
-        }
+        public override PropertyKind Kind => PropertyKind.Collection;
 
         /// <inheritdoc />
-        public override Type RelatedClrType
-        {
-            get { return ElementType; }
-        }
+        public override Type RelatedClrType => ElementType;
 
         /// <summary>
         /// Returns the type of Elements in the Collection
         /// </summary>
-        public Type ElementType
-        {
-            get { return _elementType; }
-        }
+        public Type ElementType => _elementType;
 
         /// <summary>
         /// Sets the CollectionProperty to optional (i.e. nullable).

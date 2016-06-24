@@ -19,8 +19,8 @@ namespace Microsoft.AspNetCore.OData
     [NonValidatingParameterBinding]
     public abstract class EdmStructuredObject : Delta, IEdmStructuredObject
     {
-        private Dictionary<string, object> _container = new Dictionary<string, object>();
-        private HashSet<string> _setProperties = new HashSet<string>();
+        private readonly Dictionary<string, object> _container = new Dictionary<string, object>();
+        private readonly HashSet<string> _setProperties = new HashSet<string>();
 
         private IEdmStructuredType _expectedEdmType;
         private IEdmStructuredType _actualEdmType;

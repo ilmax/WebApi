@@ -25,6 +25,6 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the action whether delete should also remove the associated item on the other end of the association.
         /// </summary>
-        public EdmOnDeleteAction OnDeleteAction { get; private set; }
+        public EdmOnDeleteAction OnDeleteAction { get;  }
     }
 }

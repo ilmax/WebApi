@@ -24,10 +24,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         {
         }
 
-        internal EntitySetConfiguration EntitySet
-        {
-            get { return (EntitySetConfiguration)Configuration; }
-        }
+        internal EntitySetConfiguration EntitySet => (EntitySetConfiguration)Configuration;
 
         /// <summary>
         /// Adds a self link to the feed.

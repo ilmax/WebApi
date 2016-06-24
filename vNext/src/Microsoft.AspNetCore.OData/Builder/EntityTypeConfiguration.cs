@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.OData.Edm;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.OData.Common;
 
 namespace Microsoft.AspNetCore.OData.Builder
@@ -19,8 +18,8 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public class EntityTypeConfiguration : StructuralTypeConfiguration
     {
-        private List<PrimitivePropertyConfiguration> _keys = new List<PrimitivePropertyConfiguration>();
-        private List<EnumPropertyConfiguration> _enumKeys = new List<EnumPropertyConfiguration>();
+        private readonly List<PrimitivePropertyConfiguration> _keys = new List<PrimitivePropertyConfiguration>();
+        private readonly List<EnumPropertyConfiguration> _enumKeys = new List<EnumPropertyConfiguration>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityTypeConfiguration"/> class.
@@ -43,40 +42,22 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the <see cref="EdmTypeKind"/> of this <see cref="IEdmTypeConfiguration"/>
         /// </summary>
-        public override EdmTypeKind Kind
-        {
-            get { return EdmTypeKind.Entity; }
-        }
+        public override EdmTypeKind Kind => EdmTypeKind.Entity;
 
         /// <summary>
         /// Gets the collection of <see cref="NavigationPropertyConfiguration"/> of this entity type.
         /// </summary>
-        public virtual IEnumerable<NavigationPropertyConfiguration> NavigationProperties
-        {
-            get
-            {
-                return ExplicitProperties.Values.OfType<NavigationPropertyConfiguration>();
-            }
-        }
+        public virtual IEnumerable<NavigationPropertyConfiguration> NavigationProperties => ExplicitProperties.Values.OfType<NavigationPropertyConfiguration>();
 
         /// <summary>
         /// Gets the collection of keys for this entity type.
         /// </summary>
-        public virtual IEnumerable<PrimitivePropertyConfiguration> Keys
-        {
-            get
-            {
-                return _keys;
-            }
-        }
+        public virtual IEnumerable<PrimitivePropertyConfiguration> Keys => _keys;
 
         /// <summary>
         /// Gets the collection of enum keys for this entity type.
         /// </summary>
-        public virtual IEnumerable<EnumPropertyConfiguration> EnumKeys
-        {
-            get { return _enumKeys; }
-        }
+        public virtual IEnumerable<EnumPropertyConfiguration> EnumKeys => _enumKeys;
 
         /// <summary>
         /// Gets or sets the base type of this entity type.

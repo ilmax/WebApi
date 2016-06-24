@@ -11,33 +11,19 @@ namespace Microsoft.AspNetCore.OData
     /// </summary>
     internal class EdmDeltaCollectionType : IEdmCollectionType
     {
-        private IEdmTypeReference _entityTypeReference;
-
         internal EdmDeltaCollectionType(IEdmTypeReference entityTypeReference)
         {
             if (entityTypeReference == null)
             {
                 throw Error.ArgumentNull("entityTypeReference");
             }
-            _entityTypeReference = entityTypeReference;
+            ElementType = entityTypeReference;
         }
 
         /// <inheritdoc />
-        public EdmTypeKind TypeKind
-        {
-            get
-            {
-                return EdmTypeKind.Collection;
-            }
-        }
+        public EdmTypeKind TypeKind => EdmTypeKind.Collection;
 
         /// <inheritdoc />
-        public IEdmTypeReference ElementType
-        {
-            get
-            {
-                return _entityTypeReference;
-            }
-        }
+        public IEdmTypeReference ElementType { get; }
     }
 }

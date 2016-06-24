@@ -36,9 +36,9 @@ namespace Microsoft.AspNetCore.OData.Builder.Conventions
             else
             {
                 IEnumerable<string> keyValues =
-                    keys.Select(key => String.Format(
+                    keys.Select(key => string.Format(
                         CultureInfo.InvariantCulture, "{0}={1}", key.Name, GetUriRepresentationForKeyValue(key, entityContext)));
-                return String.Join(",", keyValues);
+                return string.Join(",", keyValues);
             }
         }
 

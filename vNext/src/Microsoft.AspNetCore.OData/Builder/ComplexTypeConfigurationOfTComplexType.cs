@@ -12,8 +12,8 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public class ComplexTypeConfiguration<TComplexType> : StructuralTypeConfiguration<TComplexType> where TComplexType : class
     {
-        private ComplexTypeConfiguration _configuration;
-        private ODataModelBuilder _modelBuilder;
+        private readonly ComplexTypeConfiguration _configuration;
+        private readonly ODataModelBuilder _modelBuilder;
 
         internal ComplexTypeConfiguration(ComplexTypeConfiguration configuration)
             : base(configuration)
@@ -48,13 +48,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the base type of this complex type.
         /// </summary>
-        public ComplexTypeConfiguration BaseType
-        {
-            get
-            {
-                return _configuration.BaseType;
-            }
-        }
+        public ComplexTypeConfiguration BaseType => _configuration.BaseType;
 
         /// <summary>
         /// Sets the base type of this complex type to <c>null</c> meaning that this complex type

@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.OData.Builder
     /// </summary>
     public abstract class StructuralTypeConfiguration<TStructuralType> where TStructuralType : class
     {
-        private StructuralTypeConfiguration _configuration;
+        private readonly StructuralTypeConfiguration _configuration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StructuralTypeConfiguration{TStructuralType}"/> class.
@@ -35,21 +35,12 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// <summary>
         /// Gets the collection of EDM structural properties that belong to this type.
         /// </summary>
-        public IEnumerable<PropertyConfiguration> Properties
-        {
-            get { return _configuration.Properties; }
-        }
+        public IEnumerable<PropertyConfiguration> Properties => _configuration.Properties;
 
         /// <summary>
         /// Gets the full name of this EDM type.
         /// </summary>
-        public string FullName
-        {
-            get
-            {
-                return _configuration.FullName;
-            }
-        }
+        public string FullName => _configuration.FullName;
 
         /// <summary>
         /// Gets and sets the namespace of this EDM type.
@@ -86,13 +77,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         /// Gets an indicator whether this EDM type is an open type or not.
         /// Returns <c>true</c> if this is an open type; <c>false</c> otherwise.
         /// </summary>
-        public bool IsOpen
-        {
-            get
-            {
-                return _configuration.IsOpen;
-            }
-        }
+        public bool IsOpen => _configuration.IsOpen;
 
         /// <summary>
         /// Excludes a property from the type.
@@ -291,9 +276,7 @@ namespace Microsoft.AspNetCore.OData.Builder
         private CollectionPropertyConfiguration GetCollectionPropertyConfiguration(Expression propertyExpression, bool optional = false)
         {
             PropertyInfo propertyInfo = PropertySelectorVisitor.GetSelectedProperty(propertyExpression);
-            CollectionPropertyConfiguration property;
-
-            property = _configuration.AddCollectionProperty(propertyInfo);
+            CollectionPropertyConfiguration property = _configuration.AddCollectionProperty(propertyInfo);
 
             if (optional)
             {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.OData.Common;
+﻿using Microsoft.AspNetCore.OData.Common;
 
 namespace Microsoft.AspNetCore.OData
 {

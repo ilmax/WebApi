@@ -38,76 +38,31 @@ namespace Microsoft.AspNetCore.OData.Formatter
             MediaTypeHeaderValue.Parse("application/json;odata.streaming=true");
         private static readonly MediaTypeHeaderValue _applicationXml = new MediaTypeHeaderValue("application/xml");
 
-        public static MediaTypeHeaderValue ApplicationJson
-        {
-            get { return Clone(_applicationJson); }
-        }
+        public static MediaTypeHeaderValue ApplicationJson => Clone(_applicationJson);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataFullMetadata
-        {
-            get { return Clone(_applicationJsonODataFullMetadata); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataFullMetadata => Clone(_applicationJsonODataFullMetadata);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataFullMetadataStreamingFalse
-        {
-            get { return Clone(_applicationJsonODataFullMetadataStreamingFalse); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataFullMetadataStreamingFalse => Clone(_applicationJsonODataFullMetadataStreamingFalse);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataFullMetadataStreamingTrue
-        {
-            get { return Clone(_applicationJsonODataFullMetadataStreamingTrue); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataFullMetadataStreamingTrue => Clone(_applicationJsonODataFullMetadataStreamingTrue);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataMinimalMetadata
-        {
-            get { return Clone(_applicationJsonODataMinimalMetadata); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataMinimalMetadata => Clone(_applicationJsonODataMinimalMetadata);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataMinimalMetadataStreamingFalse
-        {
-            get
-            {
-                return Clone(_applicationJsonODataMinimalMetadataStreamingFalse);
-            }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataMinimalMetadataStreamingFalse => Clone(_applicationJsonODataMinimalMetadataStreamingFalse);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataMinimalMetadataStreamingTrue
-        {
-            get
-            {
-                return Clone(_applicationJsonODataMinimalMetadataStreamingTrue);
-            }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataMinimalMetadataStreamingTrue => Clone(_applicationJsonODataMinimalMetadataStreamingTrue);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataNoMetadata
-        {
-            get { return Clone(_applicationJsonODataNoMetadata); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataNoMetadata => Clone(_applicationJsonODataNoMetadata);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataNoMetadataStreamingFalse
-        {
-            get { return Clone(_applicationJsonODataNoMetadataStreamingFalse); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataNoMetadataStreamingFalse => Clone(_applicationJsonODataNoMetadataStreamingFalse);
 
-        public static MediaTypeHeaderValue ApplicationJsonODataNoMetadataStreamingTrue
-        {
-            get { return Clone(_applicationJsonODataNoMetadataStreamingTrue); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonODataNoMetadataStreamingTrue => Clone(_applicationJsonODataNoMetadataStreamingTrue);
 
-        public static MediaTypeHeaderValue ApplicationJsonStreamingFalse
-        {
-            get { return Clone(_applicationJsonStreamingFalse); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonStreamingFalse => Clone(_applicationJsonStreamingFalse);
 
-        public static MediaTypeHeaderValue ApplicationJsonStreamingTrue
-        {
-            get { return Clone(_applicationJsonStreamingTrue); }
-        }
+        public static MediaTypeHeaderValue ApplicationJsonStreamingTrue => Clone(_applicationJsonStreamingTrue);
 
-        public static MediaTypeHeaderValue ApplicationXml
-        {
-            get { return Clone(_applicationXml); }
-        }
+        public static MediaTypeHeaderValue ApplicationXml => Clone(_applicationXml);
 
         public static ODataMetadataLevel GetMetadataLevel(MediaTypeHeaderValue contentType)
         {

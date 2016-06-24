@@ -21,13 +21,7 @@ namespace Microsoft.AspNetCore.OData.Routing
     /// </summary>
     public class DefaultODataPathHandler : IODataPathHandler, IODataPathTemplateHandler
     {
-        private ODataUriResolverSetttings _resolverSettings = new ODataUriResolverSetttings();
-
-        internal ODataUriResolverSetttings ResolverSetttings
-        {
-            get { return _resolverSettings; }
-            set { _resolverSettings = value; }
-        }
+        internal ODataUriResolverSetttings ResolverSetttings { get; set; } = new ODataUriResolverSetttings();
 
         /// <summary>
         /// Parses the specified OData path as an <see cref="ODataPath"/> that contains additional information about the EDM type and entity set for the path.
@@ -139,12 +133,12 @@ namespace Microsoft.AspNetCore.OData.Routing
             catch (ODataUnrecognizedPathException ex)
             {
                 if (ex.ParsedSegments != null &&
-                    ex.ParsedSegments.Count() > 0 &&
+                    ex.ParsedSegments.Any() &&
                     (ex.ParsedSegments.Last().EdmType is IEdmComplexType ||
                      ex.ParsedSegments.Last().EdmType is IEdmEntityType) &&
                     ex.CurrentSegment != ODataSegmentKinds.Count)
                 {
-                    if (ex.UnparsedSegments.Count() == 0)
+                    if (!ex.UnparsedSegments.Any())
                     {
                         path = new Semantic.ODataPath(ex.ParsedSegments);
                         unresolvedPathSegment = new UnresolvedPathSegment(ex.CurrentSegment);

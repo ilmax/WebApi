@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.OData.Routing
                 PropertyName = PropertyName.Substring(1, PropertyName.Length - 2);
                 TreatPropertyNameAsParameterName = true;
 
-                if (String.IsNullOrEmpty(PropertyName))
+                if (string.IsNullOrEmpty(PropertyName))
                 {
                     throw new ODataException(
                         Error.Format(SRResources.EmptyParameterAlias, PropertyName, dynamicPropertyPathSegment));
@@ -43,12 +43,12 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// The parameter name of the dynamic property.
         /// </summary>
-        public string PropertyName { get; private set; }
+        public string PropertyName { get; }
 
         /// <summary>
         /// Indicates whether the template should match the name, or treat it as a parameter.
         /// </summary>
-        private bool TreatPropertyNameAsParameterName { get;  set; }
+        private bool TreatPropertyNameAsParameterName { get; }
 
         /// <inheritdoc />
         public override bool TryMatch(ODataPathSegment pathSegment, IDictionary<string, object> values)

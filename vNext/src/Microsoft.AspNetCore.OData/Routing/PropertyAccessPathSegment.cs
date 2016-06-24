@@ -44,40 +44,26 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Property;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Property;
 
         /// <summary>
         /// Gets the property property being accessed by this segment.
         /// </summary>
         public IEdmProperty Property
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the name of the property.
         /// </summary>
         public string PropertyName
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)
         {
-            if (Property != null)
-            {
-                return Property.Type.Definition;
-            }
-            return null;
+            return Property?.Type.Definition;
         }
 
         /// <inheritdoc/>

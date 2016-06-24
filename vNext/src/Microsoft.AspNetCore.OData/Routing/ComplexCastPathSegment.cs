@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
 // Licensed under the MIT License.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Library;
@@ -35,7 +34,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <param name="castTypeName">Name of the cast type.</param>
         public ComplexCastPathSegment(string castTypeName)
         {
-            if (String.IsNullOrEmpty(castTypeName))
+            if (string.IsNullOrEmpty(castTypeName))
             {
                 throw Error.ArgumentNull("castTypeName");
             }
@@ -46,31 +45,21 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.ComplexCast;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.ComplexCast;
 
         /// <summary>
         /// Gets the type of the cast.
         /// </summary>
         public IEdmComplexType CastType
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the name of the cast type.
         /// </summary>
         public string CastTypeName
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the EDM type for this segment.

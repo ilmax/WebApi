@@ -32,7 +32,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         // This constructor is intended for use by unit testing only.
         internal UnboundActionPathSegment(string actionName)
         {
-            Contract.Assert(!String.IsNullOrEmpty(actionName));
+            Contract.Assert(!string.IsNullOrEmpty(actionName));
 
             ActionName = actionName;
         }
@@ -40,31 +40,21 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.UnboundAction;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.UnboundAction;
 
         /// <summary>
         /// Gets the action being invoked.
         /// </summary>
         public IEdmActionImport Action
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <summary>
         /// Gets the name of the action.
         /// </summary>
         public string ActionName
         {
-            get;
-            private set;
-        }
+            get; }
 
         /// <inheritdoc/>
         public override IEdmType GetEdmType(IEdmType previousEdmType)

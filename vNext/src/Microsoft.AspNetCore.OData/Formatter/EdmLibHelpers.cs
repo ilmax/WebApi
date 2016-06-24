@@ -3,8 +3,6 @@
 
 namespace Microsoft.AspNetCore.OData.Formatter
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Mvc.Infrastructure;
     using Microsoft.AspNetCore.OData.Builder;
     using Microsoft.AspNetCore.OData.Common;
     using Microsoft.AspNetCore.OData.Query.Expressions;
@@ -290,31 +288,31 @@ namespace Microsoft.AspNetCore.OData.Formatter
         public static bool IsNotSortable(IEdmProperty edmProperty, IEdmModel edmModel)
         {
             QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
-            return annotation == null ? false : annotation.Restrictions.NotSortable;
+            return annotation?.Restrictions.NotSortable ?? false;
         }
 
         public static bool IsNotNavigable(IEdmProperty edmProperty, IEdmModel edmModel)
         {
             QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
-            return annotation == null ? false : annotation.Restrictions.NotNavigable;
+            return annotation?.Restrictions.NotNavigable ?? false;
         }
 
         public static bool IsNotExpandable(IEdmProperty edmProperty, IEdmModel edmModel)
         {
             QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
-            return annotation == null ? false : annotation.Restrictions.NotExpandable;
+            return annotation?.Restrictions.NotExpandable ?? false;
         }
 
         public static bool IsNotCountable(IEdmProperty edmProperty, IEdmModel edmModel)
         {
             QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
-            return annotation == null ? false : annotation.Restrictions.NotCountable;
+            return annotation?.Restrictions.NotCountable ?? false;
         }
 
         public static bool IsAutoExpand(IEdmProperty edmProperty, IEdmModel edmModel)
         {
             QueryableRestrictionsAnnotation annotation = GetPropertyRestrictions(edmProperty, edmModel);
-            return annotation == null ? false : annotation.Restrictions.AutoExpand;
+            return annotation?.Restrictions.AutoExpand ?? false;
         }
 
         private static QueryableRestrictionsAnnotation GetPropertyRestrictions(IEdmProperty edmProperty, IEdmModel edmModel)
@@ -365,12 +363,7 @@ namespace Microsoft.AspNetCore.OData.Formatter
 
             DynamicPropertyDictionaryAnnotation annotation =
                 edmModel.GetAnnotationValue<DynamicPropertyDictionaryAnnotation>(edmType);
-            if (annotation != null)
-            {
-                return annotation.PropertyInfo;
-            }
-
-            return null;
+            return annotation?.PropertyInfo;
         }
 
         public static IEdmPrimitiveType GetEdmPrimitiveTypeOrNull(Type clrType)

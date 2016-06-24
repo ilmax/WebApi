@@ -14,7 +14,7 @@ namespace Microsoft.AspNetCore.OData.Routing
     /// </summary>
     public class UnboundFunctionPathSegmentTemplate : ODataPathSegmentTemplate
     {
-        private string _functionName;
+        private readonly string _functionName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnboundFunctionPathSegmentTemplate"/> class.
@@ -35,7 +35,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// Gets the dictionary representing the mappings from the parameter names in the current function segment to the 
         /// parameter names in route data.
         /// </summary>
-        public IDictionary<string, string> ParameterMappings { get; private set; }
+        public IDictionary<string, string> ParameterMappings { get; }
 
         /// <inheritdoc />
         public override bool TryMatch(ODataPathSegment pathSegment, IDictionary<string, object> values)

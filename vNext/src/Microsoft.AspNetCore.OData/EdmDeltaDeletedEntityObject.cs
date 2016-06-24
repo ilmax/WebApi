@@ -15,9 +15,8 @@ namespace Microsoft.AspNetCore.OData
     [NonValidatingParameterBinding]
     public class EdmDeltaDeletedEntityObject : EdmEntityObject, IEdmDeltaDeletedEntityObject
     {
-        private string _id;
         private DeltaDeletedEntryReason _reason;
-        private EdmDeltaType _edmType;
+        private readonly EdmDeltaType _edmType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EdmDeltaDeletedEntityObject"/> class.
@@ -49,17 +48,7 @@ namespace Microsoft.AspNetCore.OData
         }
 
         /// <inheritdoc />
-        public string Id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                _id = value;
-            }
-        }
+        public string Id { get; set; }
 
         /// <inheritdoc />
         public DeltaDeletedEntryReason Reason

@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.OData.Routing
     {
         private readonly IEdmModel _model;
         private readonly bool _enableUriTemplateParsing;
-        private IDictionary<string, SingleValueNode> _parameterAliasValueNodes;
+        private readonly IDictionary<string, SingleValueNode> _parameterAliasValueNodes;
 
         /// <summary>
         /// Translates an ODL path to Web API path.
@@ -354,7 +354,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <returns>Translated WebApi path segment.</returns>
         public override IEnumerable<ODataPathSegment> Translate(PathTemplateSegment segment)
         {
-            string value = String.Empty;
+            string value = string.Empty;
             switch (TranslatePathTemplateSegment(segment.LiteralText, out value))
             {
                 case ODataSegmentKinds._DynamicProperty:
@@ -406,14 +406,14 @@ namespace Microsoft.AspNetCore.OData.Routing
             string value;
             if (keys.Count() < 2)
             {
-                value = String.Join(
+                value = string.Join(
                     ",",
                     keys.Select(keyValuePair =>
                         TranslateKeySegmentValue(keyValuePair.Value, enableUriTemplateParsing)).ToArray());
             }
             else
             {
-                value = String.Join(
+                value = string.Join(
                     ",",
                     keys.Select(keyValuePair =>
                         (keyValuePair.Key +
@@ -477,8 +477,8 @@ namespace Microsoft.AspNetCore.OData.Routing
                 return keyValuePair[1];
             }
 
-            value = String.Empty;
-            return String.Empty;
+            value = string.Empty;
+            return string.Empty;
         }
 
         // Translate the node in ODL path to string literal.

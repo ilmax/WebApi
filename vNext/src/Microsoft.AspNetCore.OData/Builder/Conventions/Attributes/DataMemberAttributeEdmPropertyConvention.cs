@@ -48,7 +48,7 @@ namespace Microsoft.AspNetCore.OData.Builder.Conventions.Attributes
             {
                 // set the name alias
                 if (model.ModelAliasingEnabled &&
-                    !String.IsNullOrWhiteSpace(dataMember.Name))
+                    !string.IsNullOrWhiteSpace(dataMember.Name))
                 {
                     edmProperty.Name = dataMember.Name;
                 }

@@ -7,7 +7,6 @@ using System.Linq;
 namespace Microsoft.AspNetCore.OData.Query
 {
     using Microsoft.AspNetCore.OData.Common;
-    using Microsoft.AspNetCore.OData.Query;
 
     /// <summary>
     /// Represents a class that truncates a collection to a given page size.
@@ -16,9 +15,6 @@ namespace Microsoft.AspNetCore.OData.Query
     public class TruncatedCollection<T> : List<T>, ITruncatedCollection, IEnumerable<T>
     {
         private const int MinPageSize = 1;
-
-        private bool _isTruncated;
-        private int _pageSize;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TruncatedCollection{T}"/> class.
@@ -51,25 +47,19 @@ namespace Microsoft.AspNetCore.OData.Query
                 throw Error.ArgumentMustBeGreaterThanOrEqualTo("pageSize", pageSize, MinPageSize);
             }
 
-            _pageSize = pageSize;
+            PageSize = pageSize;
 
             if (Count > pageSize)
             {
-                _isTruncated = true;
+                IsTruncated = true;
                 RemoveAt(Count - 1);
             }
         }
 
         /// <inheritdoc />
-        public int PageSize
-        {
-            get { return _pageSize; }
-        }
+        public int PageSize { get; private set; }
 
         /// <inheritdoc />
-        public bool IsTruncated
-        {
-            get { return _isTruncated; }
-        }
+        public bool IsTruncated { get; private set; }
     }
 }

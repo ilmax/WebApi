@@ -14,8 +14,8 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
 {
     internal class ClrCanonicalFunctions
     {
-        private static string _defaultString = default(string);
-        private static Enum _defaultEnum = default(Enum);
+        private static readonly string _defaultString = default(string);
+        private static readonly Enum _defaultEnum = default(Enum);
 
         // function names
         internal const string StartswithFunctionName = "startswith";
@@ -135,7 +135,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
             ToLower = MethodOf(_ => _defaultString.ToLower());
             ToUpper = MethodOf(_ => _defaultString.ToUpper());
             Trim = MethodOf(_ => _defaultString.Trim());
-            Concat = MethodOf(_ => String.Concat(default(string), default(string)));
+            Concat = MethodOf(_ => string.Concat(default(string), default(string)));
 
             CeilingOfDecimal = MethodOf(_ => Math.Ceiling(default(decimal)));
             RoundOfDecimal = MethodOf(_ => Math.Round(default(decimal)));

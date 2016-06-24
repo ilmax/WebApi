@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.OData.Routing
     /// </summary>
     public class ODataPathTemplate
     {
-        private ReadOnlyCollection<ODataPathSegmentTemplate> _segments;
+        private readonly ReadOnlyCollection<ODataPathSegmentTemplate> _segments;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ODataPathTemplate" /> class.
@@ -40,13 +40,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the path segments for the OData path.
         /// </summary>
-        public ReadOnlyCollection<ODataPathSegmentTemplate> Segments
-        {
-            get
-            {
-                return _segments;
-            }
-        }
+        public ReadOnlyCollection<ODataPathSegmentTemplate> Segments => _segments;
 
         /// <summary>
         /// Matches the current template with an OData path.

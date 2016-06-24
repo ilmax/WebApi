@@ -11,7 +11,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.OData.Core;
 using Microsoft.OData.Core.UriParser.Semantic;
 using Microsoft.OData.Core.UriParser.TreeNodeKinds;
@@ -20,7 +19,6 @@ using Microsoft.OData.Edm.Library;
 using Microsoft.AspNetCore.OData.Common;
 using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Formatter;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Microsoft.AspNetCore.OData.Query.Expressions
 {
@@ -46,7 +44,7 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
         private static readonly MethodInfo _enumTryParseMethod = typeof(Enum).GetMethods()
                         .Single(m => m.Name == "TryParse" && m.GetParameters().Length == 2);
 
-        private static Dictionary<BinaryOperatorKind, ExpressionType> _binaryOperatorMapping = new Dictionary<BinaryOperatorKind, ExpressionType>
+        private static readonly Dictionary<BinaryOperatorKind, ExpressionType> _binaryOperatorMapping = new Dictionary<BinaryOperatorKind, ExpressionType>
         {
             { BinaryOperatorKind.Add, ExpressionType.Add },
             { BinaryOperatorKind.And, ExpressionType.AndAlso },
@@ -63,13 +61,13 @@ namespace Microsoft.AspNetCore.OData.Query.Expressions
             { BinaryOperatorKind.Subtract, ExpressionType.Subtract },
         };
 
-        private IEdmModel _model;
+        private readonly IEdmModel _model;
 
-        private Stack<Dictionary<string, ParameterExpression>> _parametersStack;
+        private readonly Stack<Dictionary<string, ParameterExpression>> _parametersStack;
         private Dictionary<string, ParameterExpression> _lambdaParameters;
 
-        private ODataQuerySettings _querySettings;
-        private IAssemblyProvider _assemblyProvider;
+        private readonly ODataQuerySettings _querySettings;
+        private readonly IAssemblyProvider _assemblyProvider;
 
         private FilterBinder(IEdmModel model, IAssemblyProvider assemblyProvider, ODataQuerySettings querySettings)
             : this(model, querySettings)

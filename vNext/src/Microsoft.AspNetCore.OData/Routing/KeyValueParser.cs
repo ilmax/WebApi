@@ -30,7 +30,7 @@ namespace Microsoft.AspNetCore.OData.Routing
                 {
                     string key = segment.Substring(startIndex, currentIndex - startIndex);
 
-                    if (String.IsNullOrWhiteSpace(key))
+                    if (string.IsNullOrWhiteSpace(key))
                     {
                         throw new ODataException(
                             Error.Format(SRResources.NoKeyNameFoundInSegment, startIndex, segment));
@@ -46,7 +46,7 @@ namespace Microsoft.AspNetCore.OData.Routing
                         }
 
                         CheckSingleQuote(segment, segment);
-                        dictionary.Add(String.Empty, segment);
+                        dictionary.Add(string.Empty, segment);
                         return dictionary;
                     }
 
@@ -59,7 +59,7 @@ namespace Microsoft.AspNetCore.OData.Routing
                         {
                             string value = segment.Substring(startIndex, currentIndex - startIndex);
 
-                            if (String.IsNullOrWhiteSpace(value))
+                            if (string.IsNullOrWhiteSpace(value))
                             {
                                 throw new ODataException(
                                     Error.Format(SRResources.NoValueLiteralFoundInSegment, key, startIndex, segment));
@@ -116,10 +116,10 @@ namespace Microsoft.AspNetCore.OData.Routing
             }
 
             // Simple key.
-            if (dictionary.Count == 0 && !String.IsNullOrWhiteSpace(segment))
+            if (dictionary.Count == 0 && !string.IsNullOrWhiteSpace(segment))
             {
                 CheckSingleQuote(segment, segment);
-                dictionary.Add(String.Empty, segment);
+                dictionary.Add(string.Empty, segment);
             }
 
             return dictionary;

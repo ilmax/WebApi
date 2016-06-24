@@ -6,8 +6,6 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.AspNetCore.OData.Query
 {
-    using System;
-
     /// <summary>
     /// This class describes the validation settings for querying.
     /// </summary>
@@ -25,7 +23,6 @@ namespace Microsoft.AspNetCore.OData.Query
         private AllowedFunctions _allowedFunctions = AllowedFunctions.AllFunctions;
         private AllowedLogicalOperators _allowedLogicalOperators = AllowedLogicalOperators.All;
         private AllowedQueryOptions _allowedQueryParameters = AllowedQueryOptions.Supported;
-        private Collection<string> _allowedOrderByProperties = new Collection<string>();
         private int? _maxSkip;
         private int? _maxTop;
         private int _maxAnyAllExpressionDepth = 1;
@@ -46,7 +43,7 @@ namespace Microsoft.AspNetCore.OData.Query
             {
                 if (value > AllowedArithmeticOperators.All || value < AllowedArithmeticOperators.None)
                 {
-                    throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedArithmeticOperators));
+                    throw Error.InvalidEnumArgument("value", (int)value, typeof(AllowedArithmeticOperators));
                 }
 
                 _allowedArithmeticOperators = value;
@@ -83,7 +80,7 @@ namespace Microsoft.AspNetCore.OData.Query
             {
                 if (value > AllowedFunctions.AllFunctions || value < AllowedFunctions.None)
                 {
-                    throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedFunctions));
+                    throw Error.InvalidEnumArgument("value", (int)value, typeof(AllowedFunctions));
                 }
 
                 _allowedFunctions = value;
@@ -103,7 +100,7 @@ namespace Microsoft.AspNetCore.OData.Query
             {
                 if (value > AllowedLogicalOperators.All || value < AllowedLogicalOperators.None)
                 {
-                    throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedLogicalOperators));
+                    throw Error.InvalidEnumArgument("value", (int)value, typeof(AllowedLogicalOperators));
                 }
 
                 _allowedLogicalOperators = value;
@@ -117,13 +114,7 @@ namespace Microsoft.AspNetCore.OData.Query
         /// For example, having an empty collection means client can order the queryable result by any properties.  
         /// Adding "Name" to this list means that it only allows queryable result to be ordered by Name property.
         /// </summary>
-        public Collection<string> AllowedOrderByProperties
-        {
-            get
-            {
-                return _allowedOrderByProperties;
-            }
-        }
+        public Collection<string> AllowedOrderByProperties { get; } = new Collection<string>();
 
         /// <summary>
         /// Gets or sets the query parameters that are allowed inside query. The default is all query options,
@@ -139,7 +130,7 @@ namespace Microsoft.AspNetCore.OData.Query
             {
                 if (value > AllowedQueryOptions.All || value < AllowedQueryOptions.None)
                 {
-                    throw Error.InvalidEnumArgument("value", (Int32)value, typeof(AllowedQueryOptions));
+                    throw Error.InvalidEnumArgument("value", (int)value, typeof(AllowedQueryOptions));
                 }
 
                 _allowedQueryParameters = value;

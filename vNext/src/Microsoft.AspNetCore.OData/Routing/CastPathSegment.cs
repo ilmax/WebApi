@@ -46,13 +46,7 @@ namespace Microsoft.AspNetCore.OData.Routing
         /// <summary>
         /// Gets the segment kind for the current segment.
         /// </summary>
-        public override string SegmentKind
-        {
-            get
-            {
-                return ODataSegmentKinds.Cast;
-            }
-        }
+        public override string SegmentKind => ODataSegmentKinds.Cast;
 
         /// <summary>
         /// Gets the type of the cast.
@@ -60,7 +54,6 @@ namespace Microsoft.AspNetCore.OData.Routing
         public IEdmEntityType CastType
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -69,7 +62,6 @@ namespace Microsoft.AspNetCore.OData.Routing
         public string CastTypeName
         {
             get;
-            private set;
         }
 
         /// <summary>
